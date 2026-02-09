@@ -14,8 +14,7 @@ const Login = () => {
 
     if (configError) {
         return (
-            <div className="min-h-screen flex items-center justify-center p-4">
-                <div className="fixed inset-0 -z-10 bg-background" />
+            <div className="min-h-screen flex items-center justify-center p-4 bg-background">
                 <div className="w-full max-w-lg glass rounded-2xl p-8 border border-border">
                     <div className="flex items-center gap-3 text-danger mb-4">
                         <AlertTriangle className="h-8 w-8" />
@@ -73,77 +72,82 @@ const Login = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            {/* Background decoration */}
-            <div className="fixed inset-0 -z-10">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
-            </div>
-
-            <div className="w-full max-w-md">
-                {/* Logo */}
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 gradient-primary rounded-2xl mb-4">
-                        <AlertTriangle className="h-8 w-8 text-white" />
-                    </div>
-                    <h1 className="text-3xl font-bold text-text-primary">SIPELSAN</h1>
-                    <p className="text-text-secondary mt-2">
-                        Sistem Manajemen Pelanggaran Santriwati
-                    </p>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-surface-light">
+            <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden">
+                {/* Header Image */}
+                <div className="relative h-48 bg-gray-200 overflow-hidden">
+                    <img
+                        src="/sampul_dashborad_log_in_dhpi.png"
+                        alt="School Building"
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/10" />
                 </div>
 
-                {/* Login Form */}
-                <div className="glass rounded-2xl p-8">
-                    <h2 className="text-xl font-semibold text-text-primary mb-6 text-center">
-                        Login ke Akun Anda
-                    </h2>
+                {/* Logo & Content */}
+                <div className="px-8 pb-8 -mt-16 relative z-10">
+                    <div className="flex flex-col items-center text-center">
+                        {/* Logo Circle */}
+                        <div className="w-24 h-24 rounded-full bg-white p-1 shadow-lg mb-4 flex items-center justify-center border-4 border-emerald-500 overflow-hidden">
+                            <img
+                                src="/logo_sekolah_dhputri.png"
+                                alt="Logo Sekolah"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <Input
-                            label="Email"
-                            type="email"
-                            icon={Mail}
-                            placeholder="email@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+                        <h1 className="text-2xl font-bold text-text-primary mb-1">Selamat Datang</h1>
+                        <p className="text-text-secondary text-sm mb-8">
+                            Aplikasi Pelanggaran Santriwati
+                        </p>
 
-                        <Input
-                            label="Password"
-                            type="password"
-                            icon={Lock}
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-
-                        {error && (
-                            <div className="p-3 rounded-lg bg-danger/10 border border-danger/30 text-danger text-sm">
-                                {error}
+                        <form onSubmit={handleSubmit} className="w-full space-y-5">
+                            <div className="space-y-1.5 text-left">
+                                <label className="text-sm font-semibold text-text-primary">Email</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all outline-none text-text-primary placeholder:text-slate-400"
+                                    placeholder="admin@sekolah.sch.id"
+                                    required
+                                />
                             </div>
-                        )}
 
-                        <Button
-                            type="submit"
-                            className="w-full"
-                            size="lg"
-                            loading={loading}
-                        >
-                            Masuk
-                        </Button>
-                    </form>
+                            <div className="space-y-1.5 text-left">
+                                <div className="flex justify-between items-center">
+                                    <label className="text-sm font-semibold text-text-primary">Password</label>
+                                    <a href="#" className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
+                                        Lupa Password?
+                                    </a>
+                                </div>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all outline-none text-text-primary placeholder:text-slate-400"
+                                    placeholder="Masukkan password Anda"
+                                    required
+                                />
+                            </div>
 
-                    <p className="text-center text-text-secondary text-sm mt-6">
-                        Hubungi administrator jika lupa password
-                    </p>
+                            {error && (
+                                <div className="p-3 rounded-lg bg-red-50 text-red-600 text-sm border border-red-100 flex items-center gap-2">
+                                    <AlertTriangle className="h-4 w-4" />
+                                    {error}
+                                </div>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-3.5 px-4 bg-[#5b21b6] hover:bg-[#4c1d95] text-white font-semibold rounded-xl shadow-lg shadow-purple-500/20 transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 mt-2"
+                            >
+                                {loading ? 'Memuat...' : 'Masuk'}
+                            </button>
+                        </form>
+                    </div>
                 </div>
-
-                {/* Footer */}
-                <p className="text-center text-text-secondary text-sm mt-8">
-                    © 2024 SIPELSAN v3.0
-                </p>
             </div>
         </div>
     )

@@ -9,7 +9,7 @@ const Input = forwardRef(({
     ...props
 }, ref) => {
     return (
-        <div className="space-y-1.5">
+        <div className="space-y-2">
             {label && (
                 <label className="block text-sm font-medium text-text-secondary">
                     {label}
@@ -17,7 +17,7 @@ const Input = forwardRef(({
             )}
             <div className="relative">
                 {Icon && (
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
                         <Icon className="h-5 w-5" />
                     </div>
                 )}
@@ -25,15 +25,15 @@ const Input = forwardRef(({
                     ref={ref}
                     type={type}
                     className={`
-            w-full px-4 py-2.5 rounded-lg
+            w-full px-4 py-3 rounded-lg
             bg-surface border border-border
             text-text-primary placeholder-text-secondary
             focus:border-primary focus:ring-1 focus:ring-primary
             transition-all duration-200
-            ${Icon ? 'pl-10' : ''}
             ${error ? 'border-danger' : ''}
             ${className}
           `}
+                    style={{ paddingLeft: Icon ? '3.5rem' : undefined }}
                     {...props}
                 />
             </div>
