@@ -85,7 +85,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             <AlertTriangle className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold text-white">SIPELSAN</h1>
+                            <h1 className="text-lg font-bold text-text-primary">SIPELSAN</h1>
                             <p className="text-xs text-text-secondary">v3.0</p>
                         </div>
                     </div>
@@ -100,7 +100,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">
+                            <p className="text-sm font-medium text-text-primary truncate">
                                 {profile?.nama || 'User'}
                             </p>
                             <p className="text-xs text-text-secondary capitalize">
@@ -122,7 +122,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 transition-all duration-200
                 ${isActive
                                     ? 'gradient-primary text-white shadow-lg shadow-primary/30'
-                                    : 'text-text-secondary hover:text-white hover:bg-surface-light'
+                                    : 'text-text-secondary hover:text-primary hover:bg-surface-light'
                                 }
               `}
                         >

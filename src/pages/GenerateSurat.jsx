@@ -171,7 +171,7 @@ const GenerateSurat = () => {
             header: 'Santriwati',
             render: (row) => (
                 <div>
-                    <p className="font-medium text-white">{row.nama}</p>
+                    <p className="font-medium text-text-primary">{row.nama}</p>
                     <p className="text-xs text-text-secondary">
                         {row.nis} • {row.kelas?.nama_kelas || '-'}
                     </p>
@@ -183,8 +183,8 @@ const GenerateSurat = () => {
             width: '100px',
             render: (row) => (
                 <span className={`text-lg font-bold ${row.total_poin >= 100 ? 'text-danger' :
-                        row.total_poin >= 50 ? 'text-warning' :
-                            'text-success'
+                    row.total_poin >= 50 ? 'text-warning' :
+                        'text-success'
                     }`}>
                     {row.total_poin}
                 </span>
@@ -220,7 +220,7 @@ const GenerateSurat = () => {
             header: 'Santriwati',
             render: (row) => (
                 <div>
-                    <p className="font-medium text-white">{row.santriwati?.nama || '-'}</p>
+                    <p className="font-medium text-text-primary">{row.santriwati?.nama || '-'}</p>
                     <p className="text-xs text-text-secondary">{row.santriwati?.nis}</p>
                 </div>
             )
@@ -255,7 +255,7 @@ const GenerateSurat = () => {
         <div className="space-y-6 animate-fade-in">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-bold text-white">Generate Surat Peringatan</h1>
+                <h1 className="text-2xl font-bold text-text-primary">Generate Surat Peringatan</h1>
                 <p className="text-text-secondary">Buat surat peringatan otomatis berdasarkan akumulasi poin</p>
             </div>
 
@@ -271,15 +271,15 @@ const GenerateSurat = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="glass rounded-xl p-4 border-l-4 border-warning">
                     <p className="text-sm text-text-secondary">SP1 (Peringatan 1)</p>
-                    <p className="text-lg font-semibold text-white">1 - 49 poin</p>
+                    <p className="text-lg font-semibold text-text-primary">1 - 49 poin</p>
                 </div>
                 <div className="glass rounded-xl p-4 border-l-4 border-orange-500">
                     <p className="text-sm text-text-secondary">SP2 (Peringatan 2)</p>
-                    <p className="text-lg font-semibold text-white">50 - 99 poin</p>
+                    <p className="text-lg font-semibold text-text-primary">50 - 99 poin</p>
                 </div>
                 <div className="glass rounded-xl p-4 border-l-4 border-danger">
                     <p className="text-sm text-text-secondary">SP3 (Peringatan 3)</p>
-                    <p className="text-lg font-semibold text-white">≥ 100 poin</p>
+                    <p className="text-lg font-semibold text-text-primary">≥ 100 poin</p>
                 </div>
             </div>
 
@@ -330,7 +330,7 @@ const GenerateSurat = () => {
                         <div className="p-4 rounded-lg bg-surface-light/50">
                             <div className="flex items-center justify-between mb-3">
                                 <div>
-                                    <p className="font-semibold text-white">{selectedSantriwati.nama}</p>
+                                    <p className="font-semibold text-text-primary">{selectedSantriwati.nama}</p>
                                     <p className="text-sm text-text-secondary">
                                         {selectedSantriwati.nis} • {selectedSantriwati.kelas?.nama_kelas}
                                     </p>
@@ -351,7 +351,7 @@ const GenerateSurat = () => {
                                 <div className="space-y-2 max-h-40 overflow-y-auto">
                                     {pelanggaranList.map((p, index) => (
                                         <div key={index} className="flex items-center justify-between text-sm p-2 rounded bg-surface-light/30">
-                                            <span className="text-white">{p.master_pelanggaran?.nama_pelanggaran}</span>
+                                            <span className="text-text-primary">{p.master_pelanggaran?.nama_pelanggaran}</span>
                                             <span className="text-primary">+{p.master_pelanggaran?.poin}</span>
                                         </div>
                                     ))}

@@ -28,7 +28,7 @@ const Login = () => {
 
                     <div className="space-y-4">
                         <div className="bg-surface-light/30 p-4 rounded-lg">
-                            <h3 className="font-semibold text-white mb-2">1. Buat File .env</h3>
+                            <h3 className="font-semibold text-text-primary mb-2">1. Buat File .env</h3>
                             <p className="text-sm text-text-secondary mb-2">Buat file <code>.env.local</code> di root folder project berisi:</p>
                             <pre className="bg-black/50 p-3 rounded text-xs text-primary font-mono overflow-x-auto">
                                 VITE_SUPABASE_URL=your_project_url
@@ -37,7 +37,7 @@ const Login = () => {
                         </div>
 
                         <div className="bg-surface-light/30 p-4 rounded-lg">
-                            <h3 className="font-semibold text-white mb-2">2. Restart Server</h3>
+                            <h3 className="font-semibold text-text-primary mb-2">2. Restart Server</h3>
                             <p className="text-sm text-text-secondary">
                                 Setelah file <code>.env.local</code> dibuat, restart development server.
                             </p>
@@ -86,7 +86,7 @@ const Login = () => {
                     <div className="inline-flex items-center justify-center w-16 h-16 gradient-primary rounded-2xl mb-4">
                         <AlertTriangle className="h-8 w-8 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold text-white">SIPELSAN</h1>
+                    <h1 className="text-3xl font-bold text-text-primary">SIPELSAN</h1>
                     <p className="text-text-secondary mt-2">
                         Sistem Manajemen Pelanggaran Santriwati
                     </p>
@@ -94,7 +94,7 @@ const Login = () => {
 
                 {/* Login Form */}
                 <div className="glass rounded-2xl p-8">
-                    <h2 className="text-xl font-semibold text-white mb-6 text-center">
+                    <h2 className="text-xl font-semibold text-text-primary mb-6 text-center">
                         Login ke Akun Anda
                     </h2>
 

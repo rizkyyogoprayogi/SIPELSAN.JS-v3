@@ -91,7 +91,7 @@ const Riwayat = () => {
             header: 'Santriwati',
             render: (row) => (
                 <div>
-                    <p className="font-medium text-white">{row.santriwati?.nama || '-'}</p>
+                    <p className="font-medium text-text-primary">{row.santriwati?.nama || '-'}</p>
                     <p className="text-xs text-text-secondary">
                         {row.santriwati?.nis} • {row.santriwati?.kelas?.nama_kelas || '-'}
                     </p>
@@ -102,7 +102,7 @@ const Riwayat = () => {
             header: 'Pelanggaran',
             render: (row) => (
                 <div>
-                    <p className="text-white">{row.master_pelanggaran?.nama_pelanggaran || '-'}</p>
+                    <p className="text-text-primary">{row.master_pelanggaran?.nama_pelanggaran || '-'}</p>
                     <div className="flex items-center gap-2 mt-1">
                         {getKategoriBadge(row.master_pelanggaran?.kategori)}
                         <span className="text-xs text-primary font-medium">
@@ -146,7 +146,7 @@ const Riwayat = () => {
         <div className="space-y-6 animate-fade-in">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-bold text-white">Riwayat Pelanggaran</h1>
+                <h1 className="text-2xl font-bold text-text-primary">Riwayat Pelanggaran</h1>
                 <p className="text-text-secondary">Daftar semua pelanggaran yang tercatat</p>
             </div>
 
@@ -185,7 +185,7 @@ const Riwayat = () => {
 
                     {/* Summary */}
                     <div className="flex items-center gap-4 text-sm text-text-secondary">
-                        <span>Total: <strong className="text-white">{filteredData.length}</strong> pelanggaran</span>
+                        <span>Total: <strong className="text-text-primary">{filteredData.length}</strong> pelanggaran</span>
                         {(startDate || endDate) && (
                             <button
                                 onClick={() => { setStartDate(''); setEndDate('') }}
@@ -217,11 +217,11 @@ const Riwayat = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="text-xs text-text-secondary">Tanggal</p>
-                                <p className="text-white">{formatDate(selectedDetail.tanggal)}</p>
+                                <p className="text-text-primary">{formatDate(selectedDetail.tanggal)}</p>
                             </div>
                             <div>
                                 <p className="text-xs text-text-secondary">Dicatat oleh</p>
-                                <p className="text-white">{selectedDetail.created_by_profile?.nama || '-'}</p>
+                                <p className="text-text-primary">{selectedDetail.created_by_profile?.nama || '-'}</p>
                             </div>
                         </div>
 
@@ -229,7 +229,7 @@ const Riwayat = () => {
 
                         <div>
                             <p className="text-xs text-text-secondary">Santriwati</p>
-                            <p className="font-medium text-white">{selectedDetail.santriwati?.nama}</p>
+                            <p className="font-medium text-text-primary">{selectedDetail.santriwati?.nama}</p>
                             <p className="text-sm text-text-secondary">
                                 {selectedDetail.santriwati?.nis} • {selectedDetail.santriwati?.kelas?.nama_kelas}
                             </p>
@@ -237,7 +237,7 @@ const Riwayat = () => {
 
                         <div>
                             <p className="text-xs text-text-secondary">Pelanggaran</p>
-                            <p className="font-medium text-white">{selectedDetail.master_pelanggaran?.nama_pelanggaran}</p>
+                            <p className="font-medium text-text-primary">{selectedDetail.master_pelanggaran?.nama_pelanggaran}</p>
                             <div className="flex items-center gap-2 mt-1">
                                 {getKategoriBadge(selectedDetail.master_pelanggaran?.kategori)}
                                 <span className="text-primary font-medium">
@@ -249,7 +249,7 @@ const Riwayat = () => {
                         {selectedDetail.keterangan && (
                             <div>
                                 <p className="text-xs text-text-secondary">Keterangan</p>
-                                <p className="text-white">{selectedDetail.keterangan}</p>
+                                <p className="text-text-primary">{selectedDetail.keterangan}</p>
                             </div>
                         )}
 

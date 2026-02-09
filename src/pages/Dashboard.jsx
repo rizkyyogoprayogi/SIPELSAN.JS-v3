@@ -197,7 +197,7 @@ const Dashboard = () => {
         <div className="space-y-6 animate-fade-in">
             {/* Page Title */}
             <div>
-                <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+                <h1 className="text-2xl font-bold text-text-primary">Dashboard</h1>
                 <p className="text-text-secondary">Ringkasan data pelanggaran santriwati</p>
             </div>
 
@@ -212,7 +212,7 @@ const Dashboard = () => {
                         <div className="flex items-start justify-between">
                             <div>
                                 <p className="text-text-secondary text-sm">{stat.title}</p>
-                                <p className="text-3xl font-bold text-white mt-2">{stat.value}</p>
+                                <p className="text-3xl font-bold text-text-primary mt-2">{stat.value}</p>
                             </div>
                             <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color}`}>
                                 <stat.icon className="h-6 w-6 text-white" />
@@ -310,7 +310,7 @@ const Dashboard = () => {
                                     {index + 1}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-white truncate">{item.nama}</p>
+                                    <p className="font-medium text-text-primary truncate">{item.nama}</p>
                                     <p className="text-sm text-text-secondary">
                                         {item.nis} • {item.kelas?.nama_kelas || '-'}
                                     </p>

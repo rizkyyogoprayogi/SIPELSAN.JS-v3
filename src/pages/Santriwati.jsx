@@ -169,8 +169,8 @@ const Santriwati = () => {
             header: 'Total Poin',
             render: (row) => (
                 <span className={`font-semibold ${row.total_poin >= 100 ? 'text-danger' :
-                        row.total_poin >= 50 ? 'text-warning' :
-                            'text-success'
+                    row.total_poin >= 50 ? 'text-warning' :
+                        'text-success'
                     }`}>
                     {row.total_poin}
                 </span>
@@ -204,7 +204,7 @@ const Santriwati = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-white">Data Santriwati</h1>
+                    <h1 className="text-2xl font-bold text-text-primary">Data Santriwati</h1>
                     <p className="text-text-secondary">Kelola data santriwati</p>
                 </div>
                 <Button onClick={handleAdd} icon={Plus}>
@@ -293,7 +293,7 @@ const Santriwati = () => {
             >
                 <div className="space-y-4">
                     <p className="text-text-secondary">
-                        Apakah Anda yakin ingin menghapus santriwati <strong className="text-white">{selectedItem?.nama}</strong>?
+                        Apakah Anda yakin ingin menghapus santriwati <strong className="text-text-primary">{selectedItem?.nama}</strong>?
                     </p>
                     <div className="flex justify-end gap-3">
                         <Button

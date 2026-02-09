@@ -200,7 +200,7 @@ const MasterPelanggaran = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-white">Master Pelanggaran</h1>
+                    <h1 className="text-2xl font-bold text-text-primary">Master Pelanggaran</h1>
                     <p className="text-text-secondary">Kelola jenis pelanggaran dan poin</p>
                 </div>
                 <Button onClick={handleAdd} icon={Plus}>
@@ -301,7 +301,7 @@ const MasterPelanggaran = () => {
             >
                 <div className="space-y-4">
                     <p className="text-text-secondary">
-                        Apakah Anda yakin ingin menghapus pelanggaran <strong className="text-white">{selectedItem?.nama_pelanggaran}</strong>?
+                        Apakah Anda yakin ingin menghapus pelanggaran <strong className="text-text-primary">{selectedItem?.nama_pelanggaran}</strong>?
                     </p>
                     <div className="flex justify-end gap-3">
                         <Button

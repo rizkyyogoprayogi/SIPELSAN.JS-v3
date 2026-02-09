@@ -2,18 +2,25 @@
 
 /* Custom Theme Variables */
 :root {
-  --color-primary: #6366f1;
-  --color-primary-dark: #4f46e5;
+  /* Light Theme Variables */
+  --color-primary: #4f46e5;
+  --color-primary-dark: #4338ca;
   --color-secondary: #8b5cf6;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
-  --color-background: #0f172a;
-  --color-surface: #1e293b;
-  --color-surface-light: #334155;
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
-  --color-border: #334155;
+  --color-background: #f8fafc;
+  /* Slate-50 */
+  --color-surface: #ffffff;
+  /* White */
+  --color-surface-light: #f1f5f9;
+  /* Slate-100 */
+  --color-text-primary: #0f172a;
+  /* Slate-900 */
+  --color-text-secondary: #64748b;
+  /* Slate-500 */
+  --color-border: #e2e8f0;
+  /* Slate-200 */
 }
 
 /* Base Styles */
@@ -57,9 +64,9 @@ body {
 
 /* Custom Utilities */
 .glass {
-  background: rgba(30, 41, 59, 0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .gradient-primary {

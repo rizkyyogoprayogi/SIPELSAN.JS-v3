@@ -222,7 +222,7 @@ const InputPelanggaran = () => {
         <div className="space-y-6 animate-fade-in">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-bold text-white">Input Pelanggaran</h1>
+                <h1 className="text-2xl font-bold text-text-primary">Input Pelanggaran</h1>
                 <p className="text-text-secondary">Catat pelanggaran santriwati</p>
             </div>
 
@@ -330,7 +330,7 @@ const InputPelanggaran = () => {
                                                     <Upload className="h-5 w-5 text-primary" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-white">{file.name}</p>
+                                                    <p className="text-sm text-text-primary">{file.name}</p>
                                                     <p className="text-xs text-text-secondary">
                                                         {(file.size / 1024 / 1024).toFixed(2)} MB
                                                     </p>
@@ -372,21 +372,21 @@ const InputPelanggaran = () => {
                             <div className="space-y-3">
                                 <div>
                                     <p className="text-xs text-text-secondary">Nama</p>
-                                    <p className="font-medium text-white">{selectedSantriwati.nama}</p>
+                                    <p className="font-medium text-text-primary">{selectedSantriwati.nama}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-text-secondary">NIS</p>
-                                    <p className="text-white">{selectedSantriwati.nis}</p>
+                                    <p className="text-text-primary">{selectedSantriwati.nis}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-text-secondary">Kelas</p>
-                                    <p className="text-white">{selectedSantriwati.kelas?.nama_kelas || '-'}</p>
+                                    <p className="text-text-primary">{selectedSantriwati.kelas?.nama_kelas || '-'}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-text-secondary">Total Poin Saat Ini</p>
                                     <p className={`text-2xl font-bold ${selectedSantriwati.total_poin >= 100 ? 'text-danger' :
-                                            selectedSantriwati.total_poin >= 50 ? 'text-warning' :
-                                                'text-success'
+                                        selectedSantriwati.total_poin >= 50 ? 'text-warning' :
+                                            'text-success'
                                         }`}>
                                         {selectedSantriwati.total_poin}
                                     </p>
@@ -401,7 +401,7 @@ const InputPelanggaran = () => {
                             <div className="space-y-3">
                                 <div>
                                     <p className="text-xs text-text-secondary">Nama Pelanggaran</p>
-                                    <p className="font-medium text-white">{selectedPelanggaran.nama_pelanggaran}</p>
+                                    <p className="font-medium text-text-primary">{selectedPelanggaran.nama_pelanggaran}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-text-secondary">Kategori</p>
@@ -421,8 +421,8 @@ const InputPelanggaran = () => {
                             <div className="text-center">
                                 <p className="text-sm text-text-secondary mb-2">Estimasi Total Poin</p>
                                 <p className={`text-4xl font-bold ${(selectedSantriwati.total_poin + selectedPelanggaran.poin) >= 100 ? 'text-danger' :
-                                        (selectedSantriwati.total_poin + selectedPelanggaran.poin) >= 50 ? 'text-warning' :
-                                            'text-success'
+                                    (selectedSantriwati.total_poin + selectedPelanggaran.poin) >= 50 ? 'text-warning' :
+                                        'text-success'
                                     }`}>
                                     {selectedSantriwati.total_poin + selectedPelanggaran.poin}
                                 </p>

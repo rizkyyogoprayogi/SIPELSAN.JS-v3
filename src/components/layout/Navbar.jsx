@@ -20,13 +20,13 @@ const Navbar = ({ onMenuClick }) => {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onMenuClick}
-                        className="lg:hidden p-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-light transition-colors"
+                        className="lg:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-light transition-colors"
                     >
                         <Menu className="h-6 w-6" />
                     </button>
 
                     <div className="hidden md:block">
-                        <h2 className="text-lg font-semibold text-white">
+                        <h2 className="text-lg font-semibold text-text-primary">
                             Selamat Datang, {profile?.nama?.split(' ')[0] || 'User'}
                         </h2>
                         <p className="text-sm text-text-secondary">
@@ -38,7 +38,7 @@ const Navbar = ({ onMenuClick }) => {
                 {/* Right side */}
                 <div className="flex items-center gap-3">
                     {/* Notifications */}
-                    <button className="relative p-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-light transition-colors">
+                    <button className="relative p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-light transition-colors">
                         <Bell className="h-5 w-5" />
                         <span className="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full" />
                     </button>
