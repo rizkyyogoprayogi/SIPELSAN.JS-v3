@@ -28,14 +28,18 @@ export const AuthProvider = ({ children }) => {
         // Get initial session
         const getSession = async () => {
             try {
-                const { data: { session } } = await supabase.auth.getSession()
+                const { data: { session }, error } = await supabase.auth.getSession()
+                if (error) {
+                    console.error('Session error:', error)
+                }
                 setUser(session?.user ?? null)
                 if (session?.user) {
                     await fetchProfile(session.user.id)
                 }
             } catch (error) {
                 console.error('Error getting session:', error)
-                setConfigError(true)
+                // Don't set configError for network/transient errors
+                // Only the env var check above should set configError
             } finally {
                 setLoading(false)
             }
