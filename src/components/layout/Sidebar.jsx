@@ -8,11 +8,20 @@ import {
     FileInput,
     History,
     FileText,
+    LogOut,
     X
 } from 'lucide-react'
 
 const Sidebar = ({ isOpen, onClose }) => {
-    const { profile, canInput, canManage } = useAuth()
+    const { profile, signOut, canInput, canManage } = useAuth()
+
+    const handleLogout = async () => {
+        try {
+            await signOut()
+        } catch (error) {
+            console.error('Error signing out:', error)
+        }
+    }
 
     const menuItems = [
         {
@@ -73,11 +82,11 @@ const Sidebar = ({ isOpen, onClose }) => {
 
             {/* Sidebar */}
             <aside className={`
-                fixed lg:static inset-y-0 left-0 z-50
-                w-64 bg-white border-r border-gray-200
+                fixed lg:static inset-y-0 right-0 lg:left-0 z-50
+                w-64 bg-white border-l lg:border-l-0 lg:border-r border-gray-200
                 transform transition-transform duration-300 ease-out
                 flex flex-col
-                ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+                ${isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
             `}>
                 {/* Header */}
                 <div className="h-16 flex items-center justify-between px-5 border-b border-gray-200 shrink-0">
@@ -139,8 +148,15 @@ const Sidebar = ({ isOpen, onClose }) => {
                     ))}
                 </nav>
 
-                {/* Footer */}
-                <div className="px-4 py-3 border-t border-gray-100 shrink-0">
+                {/* Footer with Logout */}
+                <div className="px-3 py-3 border-t border-gray-100 shrink-0 space-y-2">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                        <LogOut className="h-5 w-5 shrink-0" />
+                        <span className="font-medium">Logout</span>
+                    </button>
                     <p className="text-center text-[11px] text-gray-400">
                         © 2025 SIPELSAN
                     </p>
