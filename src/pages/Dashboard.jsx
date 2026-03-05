@@ -212,14 +212,6 @@ const Dashboard = () => {
                     </button>
                 </div>
                 <div className="flex items-center gap-3">
-                    {/* Button - desktop */}
-                    <button
-                        onClick={() => navigate('/input-pelanggaran')}
-                        className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
-                    >
-                        <Plus className="h-4 w-4" />
-                        Tambah Pelanggaran
-                    </button>
                     <div className="relative flex-1 sm:max-w-xs">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <input
@@ -230,6 +222,14 @@ const Dashboard = () => {
                             className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
                         />
                     </div>
+                    {/* Button - desktop */}
+                    <button
+                        onClick={() => navigate('/input-pelanggaran')}
+                        className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Tambah Pelanggaran
+                    </button>
                 </div>
             </div>
 
