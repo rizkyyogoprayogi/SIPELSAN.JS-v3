@@ -1,8 +1,9 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Custom Theme Variables */
 :root {
-  /* Light Theme Variables */
   --color-primary: #4f46e5;
   --color-primary-dark: #4338ca;
   --color-secondary: #8b5cf6;
@@ -10,17 +11,11 @@
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-background: #f8fafc;
-  /* Slate-50 */
   --color-surface: #ffffff;
-  /* White */
   --color-surface-light: #f1f5f9;
-  /* Slate-100 */
   --color-text-primary: #0f172a;
-  /* Slate-900 */
   --color-text-secondary: #64748b;
-  /* Slate-500 */
   --color-border: #e2e8f0;
-  /* Slate-200 */
 }
 
 /* Base Styles */
@@ -64,7 +59,7 @@ body {
 
 /* Custom Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
@@ -83,52 +78,6 @@ body {
 
 .gradient-danger {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.3s ease-out;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 /* Form Elements */

@@ -1,6 +1,5 @@
 import { Menu, LogOut, Bell } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
-import Button from '../ui/Button'
 
 const Navbar = ({ onMenuClick }) => {
     const { signOut, profile } = useAuth()
@@ -14,44 +13,43 @@ const Navbar = ({ onMenuClick }) => {
     }
 
     return (
-        <header className="h-16 glass border-b border-border sticky top-0 z-30">
+        <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-30">
             <div className="h-full px-4 lg:px-6 flex items-center justify-between">
                 {/* Left side */}
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onMenuClick}
-                        className="lg:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-light transition-colors"
+                        className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
                     >
-                        <Menu className="h-6 w-6" />
+                        <Menu className="h-5 w-5" />
                     </button>
 
                     <div className="hidden md:block">
-                        <h2 className="text-lg font-semibold text-text-primary">
+                        <h2 className="text-base font-semibold text-gray-800">
                             Selamat Datang, {profile?.nama?.split(' ')[0] || 'User'}
                         </h2>
-                        <p className="text-sm text-text-secondary">
+                        <p className="text-xs text-gray-500">
                             Sistem Manajemen Pelanggaran Santriwati
                         </p>
                     </div>
                 </div>
 
                 {/* Right side */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     {/* Notifications */}
-                    <button className="relative p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-light transition-colors">
+                    <button className="relative p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors">
                         <Bell className="h-5 w-5" />
-                        <span className="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full" />
+                        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
                     </button>
 
                     {/* Logout */}
-                    <Button
-                        variant="ghost"
-                        size="sm"
+                    <button
                         onClick={handleLogout}
-                        icon={LogOut}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors text-sm"
                     >
-                        <span className="hidden sm:inline">Logout</span>
-                    </Button>
+                        <LogOut className="h-4 w-4" />
+                        <span className="hidden sm:inline font-medium">Logout</span>
+                    </button>
                 </div>
             </div>
         </header>

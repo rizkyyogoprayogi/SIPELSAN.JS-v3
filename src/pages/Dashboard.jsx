@@ -6,8 +6,6 @@ import {
     AlertTriangle,
     FileText,
     TrendingUp,
-    ArrowUp,
-    ArrowDown
 } from 'lucide-react'
 import Card from '../components/ui/Card'
 import {
@@ -21,8 +19,6 @@ import {
     PieChart,
     Pie,
     Cell,
-    LineChart,
-    Line
 } from 'recharts'
 
 const Dashboard = () => {
@@ -46,17 +42,14 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            // Fetch total santriwati
             const { count: santriwatiCount } = await supabase
                 .from('santriwati')
                 .select('*', { count: 'exact', head: true })
 
-            // Fetch total pelanggaran
             const { count: pelanggaranCount } = await supabase
                 .from('pelanggaran')
                 .select('*', { count: 'exact', head: true })
 
-            // Fetch pelanggaran bulan ini
             const startOfMonth = new Date()
             startOfMonth.setDate(1)
             startOfMonth.setHours(0, 0, 0, 0)
@@ -66,7 +59,6 @@ const Dashboard = () => {
                 .select('*', { count: 'exact', head: true })
                 .gte('tanggal', startOfMonth.toISOString().split('T')[0])
 
-            // Fetch surat bulan ini
             const { count: suratBulanIni } = await supabase
                 .from('surat')
                 .select('*', { count: 'exact', head: true })
@@ -79,7 +71,6 @@ const Dashboard = () => {
                 pelanggaranBulanIni: pelanggaranBulanIni || 0
             })
 
-            // Fetch data for charts
             await fetchMonthlyData()
             await fetchCategoryData()
             await fetchTopPelanggar()
@@ -118,8 +109,8 @@ const Dashboard = () => {
         const { data } = await supabase
             .from('pelanggaran')
             .select(`
-        master_pelanggaran (kategori)
-      `)
+                master_pelanggaran (kategori)
+            `)
 
         if (data) {
             const categoryCounts = data.reduce((acc, item) => {
@@ -153,29 +144,33 @@ const Dashboard = () => {
             title: 'Total Santriwati',
             value: stats.totalSantriwati,
             icon: Users,
-            color: 'from-blue-500 to-blue-600',
-            trend: null
+            iconBg: 'bg-blue-100',
+            iconColor: 'text-blue-600',
+            borderColor: 'border-l-blue-500',
         },
         {
             title: 'Total Pelanggaran',
             value: stats.totalPelanggaran,
             icon: AlertTriangle,
-            color: 'from-orange-500 to-orange-600',
-            trend: null
+            iconBg: 'bg-orange-100',
+            iconColor: 'text-orange-600',
+            borderColor: 'border-l-orange-500',
         },
         {
             title: 'Pelanggaran Bulan Ini',
             value: stats.pelanggaranBulanIni,
             icon: TrendingUp,
-            color: 'from-red-500 to-red-600',
-            trend: 'up'
+            iconBg: 'bg-red-100',
+            iconColor: 'text-red-600',
+            borderColor: 'border-l-red-500',
         },
         {
             title: 'Surat Bulan Ini',
             value: stats.totalSuratBulanIni,
             icon: FileText,
-            color: 'from-purple-500 to-purple-600',
-            trend: null
+            iconBg: 'bg-purple-100',
+            iconColor: 'text-purple-600',
+            borderColor: 'border-l-purple-500',
         }
     ]
 
@@ -183,81 +178,70 @@ const Dashboard = () => {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="flex flex-col items-center gap-4">
-                    <svg className="animate-spin h-10 w-10 text-primary" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-10 w-10 text-indigo-600" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    <p className="text-text-secondary">Memuat dashboard...</p>
+                    <p className="text-gray-500">Memuat dashboard...</p>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="space-y-6 animate-fade-in">
-            {/* Page Title */}
+        <div className="space-y-6">
+            {/* Page Header */}
             <div>
-                <h1 className="text-2xl font-bold text-text-primary">Dashboard</h1>
-                <p className="text-text-secondary">Ringkasan data pelanggaran santriwati</p>
+                <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+                <p className="text-gray-500 text-sm mt-1">Ringkasan data pelanggaran santriwati</p>
             </div>
 
-            {/* Stats Grid */}
+            {/* Stat Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {statCards.map((stat, index) => (
                     <div
                         key={index}
-                        className="glass rounded-xl p-5 animate-slide-up"
-                        style={{ animationDelay: `${index * 100}ms` }}
+                        className={`bg-white rounded-xl border border-gray-100 shadow-sm p-5 border-l-4 ${stat.borderColor} hover:shadow-md transition-shadow`}
                     >
-                        <div className="flex items-start justify-between">
+                        <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-text-secondary text-sm">{stat.title}</p>
-                                <p className="text-3xl font-bold text-text-primary mt-2">{stat.value}</p>
+                                <p className="text-gray-500 text-xs font-medium uppercase tracking-wide">{stat.title}</p>
+                                <p className="text-3xl font-bold text-gray-800 mt-2">{stat.value}</p>
                             </div>
-                            <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color}`}>
-                                <stat.icon className="h-6 w-6 text-white" />
+                            <div className={`p-3 rounded-xl ${stat.iconBg}`}>
+                                <stat.icon className={`h-6 w-6 ${stat.iconColor}`} />
                             </div>
                         </div>
-                        {stat.trend && (
-                            <div className="flex items-center gap-1 mt-3">
-                                {stat.trend === 'up' ? (
-                                    <ArrowUp className="h-4 w-4 text-danger" />
-                                ) : (
-                                    <ArrowDown className="h-4 w-4 text-success" />
-                                )}
-                                <span className={`text-sm ${stat.trend === 'up' ? 'text-danger' : 'text-success'}`}>
-                                    vs bulan lalu
-                                </span>
-                            </div>
-                        )}
                     </div>
                 ))}
             </div>
 
             {/* Charts Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Monthly Chart */}
+                {/* Monthly Bar Chart */}
                 <Card title="Trend Pelanggaran" subtitle="6 bulan terakhir">
                     <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={monthlyData}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                                <XAxis dataKey="name" stroke="#94a3b8" />
-                                <YAxis stroke="#94a3b8" />
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
+                                <YAxis stroke="#94a3b8" fontSize={12} />
                                 <Tooltip
                                     contentStyle={{
-                                        backgroundColor: '#1e293b',
-                                        border: '1px solid #334155',
-                                        borderRadius: '8px'
+                                        backgroundColor: '#fff',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                                        color: '#1e293b'
                                     }}
                                 />
-                                <Bar dataKey="pelanggaran" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="pelanggaran" fill="#6366f1" radius={[6, 6, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </Card>
 
-                {/* Category Pie Chart */}
+                {/* Pie Chart */}
                 <Card title="Kategori Pelanggaran" subtitle="Distribusi berdasarkan tingkat">
                     <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
@@ -278,51 +262,79 @@ const Dashboard = () => {
                                 </Pie>
                                 <Tooltip
                                     contentStyle={{
-                                        backgroundColor: '#1e293b',
-                                        border: '1px solid #334155',
-                                        borderRadius: '8px'
+                                        backgroundColor: '#fff',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                                        color: '#1e293b'
                                     }}
                                 />
                             </PieChart>
                         </ResponsiveContainer>
+                    </div>
+
+                    {/* Legend */}
+                    <div className="flex justify-center gap-6 mt-2 pt-4 border-t border-gray-100">
+                        {categoryData.map((item, index) => (
+                            <div key={item.name} className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index] }} />
+                                <span className="text-sm text-gray-600">{item.name}: <strong>{item.value}</strong></span>
+                            </div>
+                        ))}
                     </div>
                 </Card>
             </div>
 
             {/* Top Pelanggar */}
             <Card title="Top 5 Pelanggar" subtitle="Santriwati dengan poin tertinggi">
-                <div className="space-y-3">
-                    {topPelanggar.length === 0 ? (
-                        <p className="text-text-secondary text-center py-8">Belum ada data</p>
-                    ) : (
-                        topPelanggar.map((item, index) => (
-                            <div
-                                key={item.id}
-                                className="flex items-center gap-4 p-4 rounded-lg bg-surface-light/30 hover:bg-surface-light/50 transition-colors"
-                            >
-                                <div className={`
-                  w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
-                  ${index === 0 ? 'bg-yellow-500 text-black' :
-                                        index === 1 ? 'bg-gray-300 text-black' :
-                                            index === 2 ? 'bg-orange-600 text-white' :
-                                                'bg-surface-light text-text-secondary'}
-                `}>
-                                    {index + 1}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-text-primary truncate">{item.nama}</p>
-                                    <p className="text-sm text-text-secondary">
-                                        {item.nis} • {item.kelas?.nama_kelas || '-'}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-lg font-bold text-danger">{item.total_poin}</p>
-                                    <p className="text-xs text-text-secondary">poin</p>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
+                {topPelanggar.length === 0 ? (
+                    <p className="text-gray-400 text-center py-12">Belum ada data pelanggaran</p>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-gray-100">
+                                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide w-12">#</th>
+                                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nama</th>
+                                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">NIS</th>
+                                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">Kelas</th>
+                                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Poin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {topPelanggar.map((item, index) => (
+                                    <tr
+                                        key={item.id}
+                                        className={`border-b border-gray-50 hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+                                    >
+                                        <td className="py-3 px-4">
+                                            <span className={`
+                                                inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold
+                                                ${index === 0 ? 'bg-yellow-100 text-yellow-700' :
+                                                    index === 1 ? 'bg-gray-100 text-gray-600' :
+                                                        index === 2 ? 'bg-orange-100 text-orange-700' :
+                                                            'bg-gray-50 text-gray-500'}
+                                            `}>
+                                                {index + 1}
+                                            </span>
+                                        </td>
+                                        <td className="py-3 px-4">
+                                            <p className="font-medium text-gray-800 text-sm">{item.nama}</p>
+                                            <p className="text-xs text-gray-400 sm:hidden">{item.nis} • {item.kelas?.nama_kelas || '-'}</p>
+                                        </td>
+                                        <td className="py-3 px-4 text-sm text-gray-600 hidden sm:table-cell">{item.nis}</td>
+                                        <td className="py-3 px-4 text-sm text-gray-600 hidden sm:table-cell">{item.kelas?.nama_kelas || '-'}</td>
+                                        <td className="py-3 px-4 text-right">
+                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600">
+                                                {item.total_poin} poin
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </Card>
         </div>
     )
