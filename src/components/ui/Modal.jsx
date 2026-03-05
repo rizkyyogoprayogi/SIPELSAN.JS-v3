@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
 const Modal = ({
@@ -33,26 +34,25 @@ const Modal = ({
 
     if (!isOpen) return null
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+    return createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                 onClick={onClose}
             />
 
             {/* Modal */}
             <div className={`
-        relative w-full ${sizes[size]} mx-4
-        glass rounded-xl shadow-2xl
-        animate-scale-in
-      `}>
+                relative w-full ${sizes[size]} mx-4
+                bg-white rounded-xl shadow-2xl border border-gray-200
+            `}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-                    <h2 className="text-xl font-semibold text-text-primary">{title}</h2>
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                    <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-lg text-text-secondary hover:text-white hover:bg-surface-light transition-colors"
+                        className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                     >
                         <X className="h-5 w-5" />
                     </button>
@@ -63,7 +63,8 @@ const Modal = ({
                     {children}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     )
 }
 
