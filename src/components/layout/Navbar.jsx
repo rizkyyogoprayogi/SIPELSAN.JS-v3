@@ -15,8 +15,8 @@ const Navbar = ({ onMenuClick }) => {
     return (
         <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-30">
             <div className="h-full px-4 lg:px-6 flex items-center justify-between">
-                {/* Left side */}
-                <div className="flex items-center gap-4">
+                {/* Left side - Logo & Title */}
+                <div className="flex items-center gap-3">
                     <button
                         onClick={onMenuClick}
                         className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
@@ -24,13 +24,20 @@ const Navbar = ({ onMenuClick }) => {
                         <Menu className="h-5 w-5" />
                     </button>
 
-                    <div className="hidden md:block">
-                        <h2 className="text-base font-semibold text-gray-800">
-                            Selamat Datang, {profile?.nama?.split(' ')[0] || 'User'}
-                        </h2>
-                        <p className="text-xs text-gray-500">
-                            Sistem Manajemen Pelanggaran Santriwati
-                        </p>
+                    <div className="flex items-center gap-3">
+                        <img
+                            src="/logo_sekolah_dhputri.png"
+                            alt="Logo Sekolah"
+                            className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div className="hidden sm:block">
+                            <h2 className="text-base font-bold text-gray-800 leading-tight">
+                                Sistem Pencatatan Pelanggaran
+                            </h2>
+                            <p className="text-xs text-gray-500">
+                                Bagian Disiplin Pengasuhan Santriwati
+                            </p>
+                        </div>
                     </div>
                 </div>
 
