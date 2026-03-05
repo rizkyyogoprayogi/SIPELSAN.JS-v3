@@ -55,6 +55,12 @@ const Sidebar = ({ isOpen, onClose }) => {
             show: canInput
         },
         {
+            name: 'Pelanggaran',
+            path: '/pelanggaran',
+            icon: AlertTriangle,
+            show: true
+        },
+        {
             name: 'Riwayat',
             path: '/riwayat',
             icon: History,
