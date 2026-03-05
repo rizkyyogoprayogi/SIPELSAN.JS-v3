@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
 import {
@@ -7,6 +8,7 @@ import {
     FileText,
     TrendingUp,
     Search,
+    Plus,
 } from 'lucide-react'
 import Card from '../components/ui/Card'
 import {
@@ -24,6 +26,7 @@ import {
 
 const Dashboard = () => {
     const { profile } = useAuth()
+    const navigate = useNavigate()
     const [stats, setStats] = useState({
         totalSantriwati: 0,
         totalPelanggaran: 0,
@@ -193,20 +196,40 @@ const Dashboard = () => {
     return (
         <div className="space-y-6">
             {/* Page Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-                    <p className="text-gray-500 text-sm mt-1">Ringkasan data pelanggaran</p>
+            <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+                        <p className="text-gray-500 text-sm mt-1">Ringkasan data pelanggaran</p>
+                    </div>
+                    {/* Button - mobile */}
+                    <button
+                        onClick={() => navigate('/input-pelanggaran')}
+                        className="sm:hidden flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span>Tambah Pelanggaran</span>
+                    </button>
                 </div>
-                <div className="relative w-full sm:w-72">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Cari santriwati atau NISN..."
-                        className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
-                    />
+                <div className="flex items-center gap-3">
+                    {/* Button - desktop */}
+                    <button
+                        onClick={() => navigate('/input-pelanggaran')}
+                        className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Tambah Pelanggaran
+                    </button>
+                    <div className="relative flex-1 sm:max-w-xs">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Cari santriwati atau NISN..."
+                            className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
+                        />
+                    </div>
                 </div>
             </div>
 
