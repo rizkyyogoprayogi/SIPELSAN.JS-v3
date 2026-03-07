@@ -10,6 +10,7 @@ import InputPelanggaran from './pages/InputPelanggaran'
 import Riwayat from './pages/Riwayat'
 import Pelanggaran from './pages/Pelanggaran'
 import ProfileSantriwati from './pages/ProfileSantriwati'
+import ManajemenUser from './pages/ManajemenUser'
 import GenerateSurat from './pages/GenerateSurat'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="riwayat" element={<Riwayat />} />
             <Route path="pelanggaran" element={<Pelanggaran />} />
             <Route path="santriwati/:id" element={<ProfileSantriwati />} />
+            <Route path="manajemen-user" element={<ManajemenUser />} />
             <Route path="generate-surat" element={<GenerateSurat />} />
           </Route>
 

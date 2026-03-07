@@ -8,6 +8,7 @@ import {
     FileInput,
     History,
     FileText,
+    UserCog,
     LogOut,
     X
 } from 'lucide-react'
@@ -70,6 +71,12 @@ const Sidebar = ({ isOpen, onClose }) => {
             name: 'Generate Surat',
             path: '/generate-surat',
             icon: FileText,
+            show: canManage
+        },
+        {
+            name: 'Manajemen User',
+            path: '/manajemen-user',
+            icon: UserCog,
             show: canManage
         }
     ]

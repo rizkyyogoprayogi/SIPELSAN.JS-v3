@@ -109,9 +109,8 @@ export const AuthProvider = ({ children }) => {
         signIn,
         signOut,
         isAdmin: profile?.role === 'admin',
-        isMusyrifah: profile?.role === 'musyrifah',
-        isPimpinan: profile?.role === 'pimpinan',
-        canInput: profile?.role === 'admin' || profile?.role === 'musyrifah',
+        isGuru: profile?.role === 'guru',
+        canInput: profile?.role === 'admin' || profile?.role === 'guru',
         canManage: profile?.role === 'admin'
     }
 
