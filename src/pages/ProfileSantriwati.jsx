@@ -153,10 +153,10 @@ const ProfileSantriwati = () => {
                     <div className="p-4 sm:p-5 text-center">
                         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Status</p>
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${santriwati.total_poin >= 100
-                                ? 'bg-red-100 text-red-700'
-                                : santriwati.total_poin >= 50
-                                    ? 'bg-yellow-100 text-yellow-700'
-                                    : 'bg-green-100 text-green-700'
+                            ? 'bg-red-100 text-red-700'
+                            : santriwati.total_poin >= 50
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-green-100 text-green-700'
                             }`}>
                             {santriwati.total_poin >= 100 ? 'Kritis' : santriwati.total_poin >= 50 ? 'Perhatian' : 'Baik'}
                         </span>
