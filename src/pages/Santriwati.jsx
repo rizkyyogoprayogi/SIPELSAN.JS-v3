@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { Plus, Pencil, Trash2, Search, Users } from 'lucide-react'
 import Card from '../components/ui/Card'
@@ -9,6 +10,7 @@ import Select from '../components/ui/Select'
 import Modal from '../components/ui/Modal'
 
 const Santriwati = () => {
+    const navigate = useNavigate()
     const [data, setData] = useState([])
     const [kelas, setKelas] = useState([])
     const [loading, setLoading] = useState(true)
@@ -159,7 +161,14 @@ const Santriwati = () => {
         },
         {
             header: 'Nama',
-            accessor: 'nama'
+            render: (row) => (
+                <button
+                    onClick={() => navigate(`/santriwati/${row.id}`)}
+                    className="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-left"
+                >
+                    {row.nama}
+                </button>
+            )
         },
         {
             header: 'Kelas',

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
@@ -38,8 +38,48 @@ const Dashboard = () => {
     const [topPelanggar, setTopPelanggar] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
+    const [searchResults, setSearchResults] = useState([])
+    const [showResults, setShowResults] = useState(false)
+    const searchRef = useRef(null)
 
     const COLORS = ['#10b981', '#f59e0b', '#ef4444']
+
+    // Close search results on click outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (searchRef.current && !searchRef.current.contains(e.target)) {
+                setShowResults(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    // Debounced search
+    useEffect(() => {
+        if (searchQuery.trim().length < 2) {
+            setSearchResults([])
+            setShowResults(false)
+            return
+        }
+
+        const timer = setTimeout(async () => {
+            try {
+                const { data } = await supabase
+                    .from('santriwati')
+                    .select('id, nis, nama, total_poin, kelas:kelas_id(nama_kelas)')
+                    .or(`nama.ilike.%${searchQuery}%,nis.ilike.%${searchQuery}%`)
+                    .limit(6)
+
+                setSearchResults(data || [])
+                setShowResults(true)
+            } catch (error) {
+                console.error('Search error:', error)
+            }
+        }, 300)
+
+        return () => clearTimeout(timer)
+    }, [searchQuery])
 
     useEffect(() => {
         fetchDashboardData()
@@ -212,15 +252,55 @@ const Dashboard = () => {
                     </button>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="relative flex-1 sm:max-w-xs">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    {/* Search with dropdown */}
+                    <div className="relative flex-1 sm:max-w-xs" ref={searchRef}>
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
                         <input
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
+                            onFocus={() => searchResults.length > 0 && setShowResults(true)}
                             placeholder="Cari santriwati atau NISN..."
                             className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
                         />
+
+                        {/* Search Results Dropdown */}
+                        {showResults && searchResults.length > 0 && (
+                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden">
+                                {searchResults.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => {
+                                            navigate(`/santriwati/${item.id}`)
+                                            setShowResults(false)
+                                            setSearchQuery('')
+                                        }}
+                                        className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors text-left border-b border-gray-50 last:border-0"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                                                <span className="text-indigo-600 font-semibold text-xs">
+                                                    {item.nama?.charAt(0)?.toUpperCase()}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-800">{item.nama}</p>
+                                                <p className="text-xs text-gray-400">{item.nis} • {item.kelas?.nama_kelas || '-'}</p>
+                                            </div>
+                                        </div>
+                                        <span className={`text-xs font-bold ${item.total_poin >= 100 ? 'text-red-500' : item.total_poin >= 50 ? 'text-yellow-500' : 'text-green-500'}`}>
+                                            {item.total_poin} poin
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {showResults && searchQuery.trim().length >= 2 && searchResults.length === 0 && (
+                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-4 text-center">
+                                <p className="text-sm text-gray-400">Tidak ditemukan</p>
+                            </div>
+                        )}
                     </div>
                     {/* Button - desktop */}
                     <button

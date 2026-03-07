@@ -9,6 +9,7 @@ import MasterPelanggaran from './pages/MasterPelanggaran'
 import InputPelanggaran from './pages/InputPelanggaran'
 import Riwayat from './pages/Riwayat'
 import Pelanggaran from './pages/Pelanggaran'
+import ProfileSantriwati from './pages/ProfileSantriwati'
 import GenerateSurat from './pages/GenerateSurat'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="input-pelanggaran" element={<InputPelanggaran />} />
             <Route path="riwayat" element={<Riwayat />} />
             <Route path="pelanggaran" element={<Pelanggaran />} />
+            <Route path="santriwati/:id" element={<ProfileSantriwati />} />
             <Route path="generate-surat" element={<GenerateSurat />} />
           </Route>
 
