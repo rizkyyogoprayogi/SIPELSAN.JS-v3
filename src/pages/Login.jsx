@@ -145,12 +145,11 @@ const Login = () => {
                                 >
                                     {loading ? 'Memuat...' : 'Masuk Sekarang'}
                                 </button>
+                                <p className="text-gray-400 text-xs mt-8" style={{ marginBottom: '1rem' }}>
+                                    © 2025 Pondok Pesantren Darul Hijrah Putri - Batung
+                                </p>
                             </div>
                         </form>
-
-                        <p className="text-gray-400 text-xs mt-8" style={{ marginBottom: '1rem' }}>
-                            © 2025 Pondok Pesantren Darul Hijrah Putri - Batung
-                        </p>
                     </div>
                 </div>
             </div>
