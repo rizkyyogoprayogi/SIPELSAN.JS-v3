@@ -21,7 +21,12 @@ const Santriwati = () => {
     const [formData, setFormData] = useState({
         nis: '',
         nama: '',
-        kelas_id: ''
+        kelas_id: '',
+        asrama: '',
+        nomor_kamar: '',
+        nama_ortu: '',
+        no_hp_ortu: '',
+        alamat: ''
     })
     const [formErrors, setFormErrors] = useState({})
     const [submitting, setSubmitting] = useState(false)
@@ -61,7 +66,10 @@ const Santriwati = () => {
 
     const handleAdd = () => {
         setSelectedItem(null)
-        setFormData({ nis: '', nama: '', kelas_id: '' })
+        setFormData({
+            nis: '', nama: '', kelas_id: '',
+            asrama: '', nomor_kamar: '', nama_ortu: '', no_hp_ortu: '', alamat: ''
+        })
         setFormErrors({})
         setIsModalOpen(true)
     }
@@ -71,7 +79,12 @@ const Santriwati = () => {
         setFormData({
             nis: item.nis,
             nama: item.nama,
-            kelas_id: item.kelas_id || ''
+            kelas_id: item.kelas_id || '',
+            asrama: item.asrama || '',
+            nomor_kamar: item.nomor_kamar || '',
+            nama_ortu: item.nama_ortu || '',
+            no_hp_ortu: item.no_hp_ortu || '',
+            alamat: item.alamat || ''
         })
         setFormErrors({})
         setIsModalOpen(true)
@@ -104,7 +117,12 @@ const Santriwati = () => {
                     .update({
                         nis: formData.nis,
                         nama: formData.nama,
-                        kelas_id: parseInt(formData.kelas_id)
+                        kelas_id: parseInt(formData.kelas_id),
+                        asrama: formData.asrama,
+                        nomor_kamar: formData.nomor_kamar,
+                        nama_ortu: formData.nama_ortu,
+                        no_hp_ortu: formData.no_hp_ortu,
+                        alamat: formData.alamat
                     })
                     .eq('id', selectedItem.id)
 
@@ -117,6 +135,11 @@ const Santriwati = () => {
                         nis: formData.nis,
                         nama: formData.nama,
                         kelas_id: parseInt(formData.kelas_id),
+                        asrama: formData.asrama,
+                        nomor_kamar: formData.nomor_kamar,
+                        nama_ortu: formData.nama_ortu,
+                        no_hp_ortu: formData.no_hp_ortu,
+                        alamat: formData.alamat,
                         total_poin: 0
                     })
 
@@ -173,6 +196,15 @@ const Santriwati = () => {
         {
             header: 'Kelas',
             render: (row) => row.kelas?.nama_kelas || '-'
+        },
+        {
+            header: 'Asrama',
+            render: (row) => (
+                <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-900">{row.asrama || '-'}</span>
+                    {row.nomor_kamar && <span className="text-xs text-gray-500">Kamar: {row.nomor_kamar}</span>}
+                </div>
+            )
         },
         {
             header: 'Total Poin',
@@ -271,6 +303,47 @@ const Santriwati = () => {
                         options={kelas.map(k => ({ value: k.id, label: k.nama_kelas }))}
                         placeholder="Pilih kelas"
                     />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Input
+                            label="Asrama"
+                            value={formData.asrama}
+                            onChange={(e) => setFormData({ ...formData, asrama: e.target.value })}
+                            placeholder="Contoh: Asrama Aisyah"
+                        />
+                        <Input
+                            label="Nomor Kamar"
+                            value={formData.nomor_kamar}
+                            onChange={(e) => setFormData({ ...formData, nomor_kamar: e.target.value })}
+                            placeholder="Contoh: 12 B"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Input
+                            label="Nama Ortu/Wali"
+                            value={formData.nama_ortu}
+                            onChange={(e) => setFormData({ ...formData, nama_ortu: e.target.value })}
+                            placeholder="Masukkan nama ortu/wali"
+                        />
+                        <Input
+                            label="No. HP Ortu/Wali"
+                            type="tel"
+                            value={formData.no_hp_ortu}
+                            onChange={(e) => setFormData({ ...formData, no_hp_ortu: e.target.value })}
+                            placeholder="Contoh: 081234..."
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-semibold text-text-primary">Alamat</label>
+                        <textarea
+                            value={formData.alamat}
+                            onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
+                            placeholder="Masukkan alamat lengkap..."
+                            className="w-full px-4 py-2 bg-surface text-text-primary border border-border rounded-lg outline-none transition-all placeholder:text-text-placeholder focus:border-primary focus:ring-1 focus:ring-primary min-h-[80px]"
+                        ></textarea>
+                    </div>
 
                     {formErrors.submit && (
                         <div className="p-3 rounded-lg bg-danger/10 border border-danger/30 text-danger text-sm">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
-import { ArrowLeft, User, GraduationCap, AlertTriangle, Eye } from 'lucide-react'
+import { ArrowLeft, User, GraduationCap, AlertTriangle, Eye, Home, Phone, MapPin, Users } from 'lucide-react'
 import Card from '../components/ui/Card'
 
 const ProfileSantriwati = () => {
@@ -162,6 +162,60 @@ const ProfileSantriwati = () => {
                         </span>
                     </div>
                 </div>
+            </div>
+
+            {/* Informasi Pribadi */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card title="Asrama & Kontak Pribadi" className="h-full">
+                    <div className="space-y-4">
+                        <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
+                                <Home className="h-5 w-5 text-indigo-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Asrama / Kamar</p>
+                                <p className="text-gray-900 font-semibold">
+                                    {santriwati.asrama || '-'}
+                                    {santriwati.nomor_kamar ? ` (Kamar: ${santriwati.nomor_kamar})` : ''}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
+                                <Users className="h-5 w-5 text-emerald-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Nama Orang Tua / Wali</p>
+                                <p className="text-gray-900 font-semibold">{santriwati.nama_ortu || '-'}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                                <Phone className="h-5 w-5 text-blue-600" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">No. Handphone Ortu / Wali</p>
+                                <p className="text-gray-900 font-semibold">{santriwati.no_hp_ortu || '-'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card title="Alamat Tempat Tinggal" className="h-full">
+                    <div className="flex items-start gap-3 h-full">
+                        <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
+                            <MapPin className="h-5 w-5 text-orange-600" />
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-500 mb-1">Alamat Lengkap</p>
+                            <p className="text-gray-900 leading-relaxed whitespace-pre-wrap">
+                                {santriwati.alamat || 'Belum ada data alamat.'}
+                            </p>
+                        </div>
+                    </div>
+                </Card>
             </div>
 
             {/* Pelanggaran Table */}
