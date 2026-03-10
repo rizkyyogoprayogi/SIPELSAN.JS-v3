@@ -96,20 +96,19 @@ const ProfileKelas = () => {
                             <div className="w-24 h-24 rounded-2xl bg-white p-2 shadow-md shrink-0">
                                 <div className="w-full h-full rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center border border-indigo-100/50">
                                     <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                                        {kelas.nama_kelas?.substring(0, 2).replace(/\s/g, '').toUpperCase()}
+                                        {kelas.nama_kelas?.substring(0, 3).toUpperCase()}
                                     </span>
                                 </div>
                             </div>
 
                             <div className="pb-1">
                                 <div className="flex items-center gap-3">
-                                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{kelas.nama_kelas}</h1>
                                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${kelas.lembaga === 'SMA' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'
                                         }`}>
                                         {kelas.lembaga || 'SMP'}
                                     </span>
                                 </div>
-                                <p className="text-sm text-gray-500 mt-1">Data Kelas & Wali Kelas</p>
+                                <p className="text-sm text-gray-500 mt-2 font-medium">Data Kelas & Wali Kelas</p>
                             </div>
                         </div>
                     </div>
@@ -197,8 +196,8 @@ const ProfileKelas = () => {
                                         </td>
                                         <td className="py-4 px-6">
                                             <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${santri.total_poin >= 100 ? 'bg-red-100 text-red-700' :
-                                                    santri.total_poin >= 50 ? 'bg-yellow-100 text-yellow-700' :
-                                                        'bg-green-100 text-green-700'
+                                                santri.total_poin >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                                                    'bg-green-100 text-green-700'
                                                 }`}>
                                                 {santri.total_poin >= 100 ? 'Kritis' : santri.total_poin >= 50 ? 'Perhatian' : 'Baik'}
                                             </span>
