@@ -10,6 +10,7 @@ import InputPelanggaran from './pages/InputPelanggaran'
 import Riwayat from './pages/Riwayat'
 import Pelanggaran from './pages/Pelanggaran'
 import ProfileSantriwati from './pages/ProfileSantriwati'
+import ProfileKelas from './pages/ProfileKelas'
 import ManajemenUser from './pages/ManajemenUser'
 import GenerateSurat from './pages/GenerateSurat'
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="santriwati" element={<Santriwati />} />
             <Route path="kelas" element={<Kelas />} />
+            <Route path="kelas/:id" element={<ProfileKelas />} />
             <Route path="master-pelanggaran" element={<MasterPelanggaran />} />
             <Route path="input-pelanggaran" element={<InputPelanggaran />} />
             <Route path="riwayat" element={<Riwayat />} />
