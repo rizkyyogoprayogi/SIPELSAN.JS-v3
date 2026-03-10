@@ -442,7 +442,7 @@ const Dashboard = () => {
                                         <td className="py-3 px-4 text-sm text-gray-600 hidden sm:table-cell">{item.nis}</td>
                                         <td className="py-3 px-4 text-sm text-gray-600 hidden sm:table-cell">{item.kelas?.nama_kelas || '-'}</td>
                                         <td className="py-3 px-4 text-right">
-                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600">
+                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600 whitespace-nowrap">
                                                 {item.total_poin} poin
                                             </span>
                                         </td>
