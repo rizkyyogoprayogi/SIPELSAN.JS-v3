@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../services/supabaseClient'
+import { createClient } from '@supabase/supabase-js'
 import { useAuth } from '../hooks/useAuth'
 import { Plus, Pencil, Trash2, Search, Shield, ShieldCheck } from 'lucide-react'
 import Modal from '../components/ui/Modal'
@@ -94,8 +95,20 @@ const ManajemenUser = () => {
 
                 if (error) throw error
             } else {
-                // Create new user via Supabase Auth
-                const { data: authData, error: authError } = await supabase.auth.signUp({
+                // Gunakan client Supabase secondary agar admin tidak ter-logout saat mendaftarkan user baru
+                const tempSupabase = createClient(
+                    import.meta.env.VITE_SUPABASE_URL,
+                    import.meta.env.VITE_SUPABASE_ANON_KEY,
+                    {
+                        auth: {
+                            persistSession: false,
+                            autoRefreshToken: false,
+                        }
+                    }
+                )
+
+                // Create new user via secondary client
+                const { data: authData, error: authError } = await tempSupabase.auth.signUp({
                     email: formData.email,
                     password: formData.password,
                     options: {
@@ -108,18 +121,9 @@ const ManajemenUser = () => {
 
                 if (authError) throw authError
 
-                // Create profile
-                if (authData.user) {
-                    const { error: profileError } = await supabase
-                        .from('profiles')
-                        .upsert({
-                            id: authData.user.id,
-                            nama: formData.nama,
-                            role: formData.role
-                        })
-
-                    if (profileError) throw profileError
-                }
+                // Trigger database Supabase secara otomatis akan membuat record di tabel profiles
+                // karena kita sudah menyertakan 'nama' dan 'role' di dalam options.data
+                // Sehingga kita tidak perlu melakukan INSERT manual ke tabel profiles lagi.
             }
 
             setIsModalOpen(false)
