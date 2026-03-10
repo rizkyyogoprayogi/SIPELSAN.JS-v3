@@ -11,6 +11,7 @@ import Modal from '../components/ui/Modal'
 const Kelas = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
+    const [filterLembaga, setFilterLembaga] = useState('Semua')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [selectedItem, setSelectedItem] = useState(null)
@@ -185,6 +186,12 @@ const Kelas = () => {
         }
     ]
 
+    const filteredData = data.filter(item => {
+        if (filterLembaga === 'Semua') return true
+        if (filterLembaga === 'SMP') return item.lembaga === 'SMP' || !item.lembaga // treat null as SMP conditionally or strictly 'SMP'
+        return item.lembaga === filterLembaga
+    })
+
     return (
         <div className="space-y-6 animate-fade-in">
             {/* Header */}
@@ -193,16 +200,41 @@ const Kelas = () => {
                     <h1 className="text-2xl font-bold text-text-primary">Data Kelas</h1>
                     <p className="text-text-secondary">Kelola data kelas</p>
                 </div>
-                <Button onClick={handleAdd} icon={Plus}>
-                    Tambah Kelas
-                </Button>
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                    {/* Switch Filter Lembaga */}
+                    <div className="bg-gray-100/80 p-1 rounded-lg flex items-center shadow-inner overflow-hidden border border-gray-200/60 w-full sm:w-auto">
+                        {['Semua', 'SMP', 'SMA'].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setFilterLembaga(tab)}
+                                className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-200 
+                                ${filterLembaga === tab
+                                        ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-gray-900/5'
+                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50/50'
+                                    }`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </div>
+
+                    <Button onClick={handleAdd} icon={Plus} className="hidden sm:flex shrink-0">
+                        Tambah Kelas
+                    </Button>
+                </div>
             </div>
+
+            {/* Mobile Add Button */}
+            <div className="sm:hidden w-full h-[1px] bg-border my-2"></div>
+            <Button onClick={handleAdd} icon={Plus} className="sm:hidden w-full justify-center">
+                Tambah Kelas
+            </Button>
 
             {/* Content */}
             <Card noPadding>
                 <Table
                     columns={columns}
-                    data={data}
+                    data={filteredData}
                     loading={loading}
                     emptyMessage="Belum ada data kelas"
                 />
