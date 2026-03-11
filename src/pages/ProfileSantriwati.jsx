@@ -1,15 +1,29 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
+import { useAuth } from '../hooks/useAuth'
 import { ArrowLeft, User, GraduationCap, AlertTriangle, Eye, Home, Phone, MapPin, Users } from 'lucide-react'
 import Card from '../components/ui/Card'
 
 const ProfileSantriwati = () => {
     const { id } = useParams()
     const navigate = useNavigate()
+    const { canInput, canManage } = useAuth()
     const [santriwati, setSantriwati] = useState(null)
     const [pelanggaran, setPelanggaran] = useState([])
+    const [pelanggaranList, setPelanggaranList] = useState([])
     const [loading, setLoading] = useState(true)
+    const [isEditOpen, setIsEditOpen] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
+    const [deleteConfirm, setDeleteConfirm] = useState(null)
+    const [editForm, setEditForm] = useState({
+        id: '',
+        tanggal: '',
+        waktu: '',
+        keterangan: '',
+        perbaikan: '',
+        pelanggaran_id: ''
+    })
 
     useEffect(() => {
         if (id) {
@@ -40,20 +54,84 @@ const ProfileSantriwati = () => {
 
     const fetchPelanggaran = async () => {
         try {
-            const { data, error } = await supabase
-                .from('pelanggaran')
-                .select(`
-                    *,
-                    master_pelanggaran:pelanggaran_id (nama_pelanggaran, kategori, poin),
-                    created_by_profile:created_by (nama)
-                `)
-                .eq('santriwati_id', id)
-                .order('created_at', { ascending: false })
+            const [pelanggaranRes, masterRes] = await Promise.all([
+                supabase
+                    .from('pelanggaran')
+                    .select(`
+                        *,
+                        master_pelanggaran:pelanggaran_id (id, nama_pelanggaran, kategori, poin),
+                        created_by_profile:created_by (nama)
+                    `)
+                    .eq('santriwati_id', id)
+                    .order('created_at', { ascending: false }),
+                supabase.from('master_pelanggaran').select('*').order('kategori').order('nama_pelanggaran')
+            ])
 
-            if (error) throw error
-            setPelanggaran(data || [])
+            if (pelanggaranRes.error) throw pelanggaranRes.error
+            if (masterRes.error) throw masterRes.error
+
+            setPelanggaran(pelanggaranRes.data || [])
+            setPelanggaranList(masterRes.data || [])
         } catch (error) {
             console.error('Error fetching pelanggaran:', error)
+        }
+    }
+
+    const handleDelete = async (pelanggaranId) => {
+        try {
+            const { error } = await supabase
+                .from('pelanggaran')
+                .delete()
+                .eq('id', pelanggaranId)
+            if (error) throw error
+            setDeleteConfirm(null)
+            fetchPelanggaran()
+        } catch (error) {
+            console.error('Error deleting:', error)
+        }
+    }
+
+    const handleEditClick = (item) => {
+        setEditForm({
+            id: item.id,
+            tanggal: item.tanggal,
+            waktu: item.waktu || '',
+            keterangan: item.keterangan || '',
+            perbaikan: item.perbaikan || '',
+            pelanggaran_id: item.master_pelanggaran?.id || ''
+        })
+        setIsEditOpen(true)
+    }
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault()
+        setSubmitting(true)
+        try {
+            let updateData = {
+                tanggal: editForm.tanggal,
+                waktu: editForm.waktu || null,
+                keterangan: editForm.keterangan || null,
+                perbaikan: editForm.perbaikan || null
+            }
+
+            if (editForm.pelanggaran_id) {
+                updateData.pelanggaran_id = editForm.pelanggaran_id
+            }
+
+            const { error } = await supabase
+                .from('pelanggaran')
+                .update(updateData)
+                .eq('id', editForm.id)
+
+            if (error) throw error
+
+            setIsEditOpen(false)
+            fetchPelanggaran()
+        } catch (error) {
+            console.error('Error updating:', error)
+            alert('Gagal mengupdate data. Silakan coba lagi.')
+        } finally {
+            setSubmitting(false)
         }
     }
 
@@ -275,6 +353,9 @@ const ProfileSantriwati = () => {
                                     <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Poin</th>
                                     <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Bukti</th>
                                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pelapor</th>
+                                    {canInput && (
+                                        <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Aksi</th>
+                                    )}
                                 </tr>
                             </thead>
                             <tbody>
@@ -328,6 +409,45 @@ const ProfileSantriwati = () => {
                                         <td className="py-3 px-4">
                                             <p className="text-sm text-gray-600">{item.created_by_profile?.nama || '-'}</p>
                                         </td>
+                                        {canInput && (
+                                            <td className="py-3 px-4">
+                                                <div className="flex items-center justify-center gap-1">
+                                                    <button
+                                                        onClick={() => handleEditClick(item)}
+                                                        className="px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100 transition-colors"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    {canManage && (
+                                                        <>
+                                                            {deleteConfirm === item.id ? (
+                                                                <div className="flex items-center gap-1">
+                                                                    <button
+                                                                        onClick={() => handleDelete(item.id)}
+                                                                        className="px-2 py-1.5 text-xs font-medium text-white bg-red-500 rounded-md hover:bg-red-600"
+                                                                    >
+                                                                        Ya
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => setDeleteConfirm(null)}
+                                                                        className="px-2 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
+                                                                    >
+                                                                        Batal
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => setDeleteConfirm(item.id)}
+                                                                    className="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                                                                >
+                                                                    Hapus
+                                                                </button>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>
@@ -335,6 +455,106 @@ const ProfileSantriwati = () => {
                     </div>
                 )}
             </Card>
+
+            {/* Modal Edit Pelanggaran */}
+            {isEditOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="bg-white rounded-xl shadow-lg w-full max-w-lg overflow-hidden animate-slide-up">
+                        <div className="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-gray-800">Edit Pelanggaran</h2>
+                            <button
+                                onClick={() => setIsEditOpen(false)}
+                                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleEditSubmit} className="p-4 sm:p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Pilih Jenis Pelanggaran (Opsional jika ingin diubah)</label>
+                                <select
+                                    value={editForm.pelanggaran_id}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, pelanggaran_id: e.target.value }))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                >
+                                    <option value="">-- Pertahankan Pelanggaran Sebelumnya --</option>
+                                    {pelanggaranList.map((p) => (
+                                        <option key={p.id} value={p.id}>{p.nama_pelanggaran} ({p.poin} poin)</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="block text-sm font-medium text-gray-700">Tanggal</label>
+                                    <input
+                                        type="date"
+                                        required
+                                        value={editForm.tanggal}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, tanggal: e.target.value }))}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="block text-sm font-medium text-gray-700">Waktu</label>
+                                    <input
+                                        type="time"
+                                        value={editForm.waktu}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, waktu: e.target.value }))}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Keterangan / Kronologi</label>
+                                <textarea
+                                    value={editForm.keterangan}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, keterangan: e.target.value }))}
+                                    rows={3}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none"
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Tindakan / Perbaikan</label>
+                                <textarea
+                                    value={editForm.perbaikan}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, perbaikan: e.target.value }))}
+                                    rows={2}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none"
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditOpen(false)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={submitting}
+                                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                                >
+                                    {submitting && (
+                                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                        </svg>
+                                    )}
+                                    Simpan Perubahan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
