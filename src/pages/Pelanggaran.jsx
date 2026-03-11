@@ -224,7 +224,8 @@ const Pelanggaran = () => {
                                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Waktu & Tanggal</th>
                                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Santri</th>
                                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pelanggaran</th>
-                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide max-w-[200px]">Keterangan & Tindakan</th>
+                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide max-w-[200px]">Keterangan</th>
+                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide max-w-[200px]">Tindakan Perbaikan</th>
                                 <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tingkat</th>
                                 <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Poin</th>
                                 <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Bukti</th>
@@ -238,7 +239,7 @@ const Pelanggaran = () => {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan={canInput ? 10 : 9} className="py-16 text-center">
+                                    <td colSpan={canInput ? 11 : 10} className="py-16 text-center">
                                         <div className="flex flex-col items-center gap-3">
                                             <svg className="animate-spin h-8 w-8 text-indigo-600" viewBox="0 0 24 24">
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -250,7 +251,7 @@ const Pelanggaran = () => {
                                 </tr>
                             ) : filteredData.length === 0 ? (
                                 <tr>
-                                    <td colSpan={canInput ? 10 : 9} className="py-16 text-center text-gray-400">
+                                    <td colSpan={canInput ? 11 : 10} className="py-16 text-center text-gray-400">
                                         Belum ada data pelanggaran
                                     </td>
                                 </tr>
