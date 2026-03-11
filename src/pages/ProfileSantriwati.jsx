@@ -165,41 +165,43 @@ const ProfileSantriwati = () => {
             </div>
 
             {/* Ringkasan Kategori Pelanggaran */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition-shadow">
-                    <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center shrink-0">
-                        <AlertTriangle className="h-6 w-6 text-green-500" />
+            <Card title="Ringkasan Kategori Pelanggaran">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+                    <div className="flex items-center gap-4 pt-4 sm:pt-0 first:pt-0 sm:px-4 first:sm:pl-0 last:sm:pr-0">
+                        <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+                            <AlertTriangle className="h-6 w-6 text-green-500" />
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">Pelanggaran Ringan</p>
+                            <p className="text-2xl font-bold text-gray-900">
+                                {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'ringan').length}
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <p className="text-sm text-gray-500 font-medium">Pelanggaran Ringan</p>
-                        <p className="text-2xl font-bold text-gray-900">
-                            {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'ringan').length}
-                        </p>
+                    <div className="flex items-center gap-4 pt-4 sm:pt-0 sm:px-4">
+                        <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
+                            <AlertTriangle className="h-6 w-6 text-yellow-500" />
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">Pelanggaran Sedang</p>
+                            <p className="text-2xl font-bold text-gray-900">
+                                {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'sedang').length}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4 pt-4 sm:pt-0 sm:px-4">
+                        <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                            <AlertTriangle className="h-6 w-6 text-red-500" />
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">Pelanggaran Berat</p>
+                            <p className="text-2xl font-bold text-gray-900">
+                                {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'berat').length}
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition-shadow">
-                    <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
-                        <AlertTriangle className="h-6 w-6 text-yellow-500" />
-                    </div>
-                    <div>
-                        <p className="text-sm text-gray-500 font-medium">Pelanggaran Sedang</p>
-                        <p className="text-2xl font-bold text-gray-900">
-                            {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'sedang').length}
-                        </p>
-                    </div>
-                </div>
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition-shadow">
-                    <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                        <AlertTriangle className="h-6 w-6 text-red-500" />
-                    </div>
-                    <div>
-                        <p className="text-sm text-gray-500 font-medium">Pelanggaran Berat</p>
-                        <p className="text-2xl font-bold text-gray-900">
-                            {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'berat').length}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            </Card>
 
             {/* Informasi Pribadi */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
