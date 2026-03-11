@@ -35,13 +35,13 @@ const Sidebar = ({ isOpen, onClose }) => {
             name: 'Santriwati',
             path: '/santriwati',
             icon: Users,
-            show: canManage
+            show: canManage || canInput
         },
         {
             name: 'Kelas',
             path: '/kelas',
             icon: GraduationCap,
-            show: canManage
+            show: canManage || canInput
         },
         {
             name: 'Master Pelanggaran',

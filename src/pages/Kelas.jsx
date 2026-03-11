@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
+import { useAuth } from '../hooks/useAuth'
 import { Plus, Pencil, Trash2, GraduationCap } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
@@ -9,6 +10,7 @@ import Input from '../components/ui/Input'
 import Modal from '../components/ui/Modal'
 
 const Kelas = () => {
+    const { canManage } = useAuth()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [filterLembaga, setFilterLembaga] = useState('Semua')
@@ -186,6 +188,9 @@ const Kelas = () => {
         }
     ]
 
+    // Filter columns based on access level
+    const displayColumns = canManage ? columns : columns.filter(col => col.header !== 'Aksi')
+
     const filteredData = data.filter(item => {
         if (filterLembaga === 'Semua') return true
         if (filterLembaga === 'SMP') return item.lembaga === 'SMP' || !item.lembaga // treat null as SMP conditionally or strictly 'SMP'
@@ -208,7 +213,7 @@ const Kelas = () => {
                                 key={tab}
                                 onClick={() => setFilterLembaga(tab)}
                                 className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-200 
-                                ${filterLembaga === tab
+                                    ${filterLembaga === tab
                                         ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-gray-900/5'
                                         : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50/50'
                                     }`}
@@ -218,22 +223,28 @@ const Kelas = () => {
                         ))}
                     </div>
 
-                    <Button onClick={handleAdd} icon={Plus} className="hidden sm:flex shrink-0">
-                        Tambah Kelas
-                    </Button>
+                    {canManage && (
+                        <Button onClick={handleAdd} icon={Plus} className="hidden sm:flex shrink-0">
+                            Tambah Kelas
+                        </Button>
+                    )}
                 </div>
             </div>
 
             {/* Mobile Add Button */}
-            <div className="sm:hidden w-full h-[1px] bg-border my-2"></div>
-            <Button onClick={handleAdd} icon={Plus} className="sm:hidden w-full justify-center">
-                Tambah Kelas
-            </Button>
+            {canManage && (
+                <>
+                    <div className="sm:hidden w-full h-[1px] bg-border my-2"></div>
+                    <Button onClick={handleAdd} icon={Plus} className="sm:hidden w-full justify-center">
+                        Tambah Kelas
+                    </Button>
+                </>
+            )}
 
             {/* Content */}
             <Card noPadding>
                 <Table
-                    columns={columns}
+                    columns={displayColumns}
                     data={filteredData}
                     loading={loading}
                     emptyMessage="Belum ada data kelas"

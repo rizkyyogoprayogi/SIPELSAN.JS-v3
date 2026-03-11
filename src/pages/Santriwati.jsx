@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
+import { useAuth } from '../hooks/useAuth'
 import { Plus, Pencil, Trash2, Search, Users } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
@@ -10,6 +11,7 @@ import Select from '../components/ui/Select'
 import Modal from '../components/ui/Modal'
 
 const Santriwati = () => {
+    const { canManage } = useAuth()
     const navigate = useNavigate()
     const [data, setData] = useState([])
     const [kelas, setKelas] = useState([])
@@ -240,6 +242,9 @@ const Santriwati = () => {
         }
     ]
 
+    // Filter columns based on access level
+    const displayColumns = canManage ? columns : columns.filter(col => col.header !== 'Aksi')
+
     return (
         <div className="space-y-6 animate-fade-in">
             {/* Header */}
@@ -248,9 +253,11 @@ const Santriwati = () => {
                     <h1 className="text-2xl font-bold text-text-primary">Data Santriwati</h1>
                     <p className="text-text-secondary">Kelola data santriwati</p>
                 </div>
-                <Button onClick={handleAdd} icon={Plus}>
-                    Tambah Santriwati
-                </Button>
+                {canManage && (
+                    <Button onClick={handleAdd} icon={Plus}>
+                        Tambah Santriwati
+                    </Button>
+                )}
             </div>
 
             {/* Content */}
@@ -267,7 +274,7 @@ const Santriwati = () => {
 
                 {/* Table */}
                 <Table
-                    columns={columns}
+                    columns={displayColumns}
                     data={filteredData}
                     loading={loading}
                     emptyMessage="Belum ada data santriwati"
