@@ -21,8 +21,7 @@ const Pelanggaran = () => {
         waktu: '',
         keterangan: '',
         perbaikan: '',
-        pelanggaran_id: '',
-        santriwati_nama: ''
+        pelanggaran_id: ''
     })
     const [submitting, setSubmitting] = useState(false)
 
@@ -83,7 +82,7 @@ const Pelanggaran = () => {
                 user.id,
                 'HAPUS',
                 'Pelanggaran',
-                `Menghapus riwayat pelanggaran atas nama ${data.find(d => d.id === id)?.santriwati?.nama || 'tidak diketahui'}`
+                `Menghapus riwayat pelanggaran dengan ID: ${id}`
             )
 
             setDeleteConfirm(null)
@@ -100,8 +99,7 @@ const Pelanggaran = () => {
             waktu: item.waktu || '',
             keterangan: item.keterangan || '',
             perbaikan: item.perbaikan || '',
-            pelanggaran_id: item.master_pelanggaran?.id || '',
-            santriwati_nama: item.santriwati?.nama || ''
+            pelanggaran_id: item.master_pelanggaran?.id || ''
         })
         setIsEditOpen(true)
     }
@@ -132,7 +130,7 @@ const Pelanggaran = () => {
                 user.id,
                 'EDIT',
                 'Pelanggaran',
-                `Mengedit riwayat pelanggaran atas nama ${editForm.santriwati_nama}`
+                `Mengedit riwayat pelanggaran dengan ID: ${editForm.id}`
             )
 
             setIsEditOpen(false)
