@@ -3,7 +3,7 @@ import { supabase } from '../services/supabaseClient'
 import { createClient } from '@supabase/supabase-js'
 import { useAuth } from '../hooks/useAuth'
 import { logActivity } from '../services/activityLogger'
-import { Plus, Pencil, Trash2, Search, UserCog, User as UserIcon } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search, UserCog, User as UserIcon, Shield, ShieldCheck } from 'lucide-react'
 import Modal from '../components/ui/Modal'
 
 const ManajemenUser = () => {
