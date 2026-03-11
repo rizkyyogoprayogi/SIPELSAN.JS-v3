@@ -1,4 +1,5 @@
 import { Menu, Bell } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const Navbar = ({ onMenuClick }) => {
     return (
@@ -24,10 +25,10 @@ const Navbar = ({ onMenuClick }) => {
                 {/* Right side */}
                 <div className="flex items-center gap-2">
                     {/* Notifications */}
-                    <button className="relative p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors">
+                    <Link to="/log-aktivitas" className="relative p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors">
                         <Bell className="h-5 w-5" />
                         <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-                    </button>
+                    </Link>
 
                     {/* Hamburger menu - mobile only, now on the right */}
                     <button

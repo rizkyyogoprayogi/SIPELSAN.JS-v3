@@ -299,7 +299,7 @@ const Dashboard = () => {
                         className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
                     >
                         <Plus className="h-4 w-4" />
-                        <span className="hidden sm:inline">Tambah Pelanggaran</span>
+                        <span className="hidden sm:inline">Catat Pelanggaran</span>
                     </button>
                 </div>
             </div>
@@ -328,12 +328,12 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Monthly Bar Chart */}
                 <Card title="Trend Pelanggaran" subtitle="6 bulan terakhir">
-                    <div className="h-72">
+                    <div className="w-full h-72 min-h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={monthlyData}>
+                            <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
-                                <YAxis stroke="#94a3b8" fontSize={12} />
+                                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickMargin={10} />
+                                <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(value) => Math.round(value)} />
                                 <Tooltip
                                     contentStyle={{
                                         backgroundColor: '#fff',
@@ -343,7 +343,7 @@ const Dashboard = () => {
                                         color: '#1e293b'
                                     }}
                                 />
-                                <Bar dataKey="pelanggaran" fill="#6366f1" radius={[6, 6, 0, 0]} />
+                                <Bar dataKey="pelanggaran" fill="#6366f1" radius={[6, 6, 0, 0]} maxBarSize={50} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -351,18 +351,19 @@ const Dashboard = () => {
 
                 {/* Pie Chart */}
                 <Card title="Kategori Pelanggaran" subtitle="Distribusi berdasarkan tingkat">
-                    <div className="h-72">
+                    <div className="w-full h-72 min-h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
+                            <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                                 <Pie
                                     data={categoryData}
                                     cx="50%"
                                     cy="50%"
                                     innerRadius={60}
-                                    outerRadius={100}
+                                    outerRadius={80}
                                     paddingAngle={5}
                                     dataKey="value"
                                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                    labelLine={false}
                                 >
                                     {categoryData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
