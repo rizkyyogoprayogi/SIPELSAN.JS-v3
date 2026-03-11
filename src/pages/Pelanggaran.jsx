@@ -8,10 +8,21 @@ const Pelanggaran = () => {
     const { canInput, canManage } = useAuth()
     const navigate = useNavigate()
     const [data, setData] = useState([])
+    const [pelanggaranList, setPelanggaranList] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
     const [filterPeriod, setFilterPeriod] = useState('semua')
     const [deleteConfirm, setDeleteConfirm] = useState(null)
+    const [isEditOpen, setIsEditOpen] = useState(false)
+    const [editForm, setEditForm] = useState({
+        id: null,
+        tanggal: '',
+        waktu: '',
+        keterangan: '',
+        perbaikan: '',
+        pelanggaran_id: ''
+    })
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         fetchData()
@@ -41,9 +52,16 @@ const Pelanggaran = () => {
                 query = query.gte('tanggal', startOfWeek.toISOString().split('T')[0])
             }
 
-            const { data: result, error } = await query
-            if (error) throw error
-            setData(result || [])
+            const [resultRes, masterRes] = await Promise.all([
+                query,
+                supabase.from('master_pelanggaran').select('*').order('kategori').order('nama_pelanggaran')
+            ])
+
+            if (resultRes.error) throw resultRes.error
+            if (masterRes.error) throw masterRes.error
+
+            setData(resultRes.data || [])
+            setPelanggaranList(masterRes.data || [])
         } catch (error) {
             console.error('Error fetching pelanggaran:', error)
         } finally {
@@ -62,6 +80,50 @@ const Pelanggaran = () => {
             fetchData()
         } catch (error) {
             console.error('Error deleting:', error)
+        }
+    }
+
+    const handleEditClick = (item) => {
+        setEditForm({
+            id: item.id,
+            tanggal: item.tanggal,
+            waktu: item.waktu || '',
+            keterangan: item.keterangan || '',
+            perbaikan: item.perbaikan || '',
+            pelanggaran_id: item.master_pelanggaran?.id || ''
+        })
+        setIsEditOpen(true)
+    }
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault()
+        setSubmitting(true)
+        try {
+            let updateData = {
+                tanggal: editForm.tanggal,
+                waktu: editForm.waktu || null,
+                keterangan: editForm.keterangan || null,
+                perbaikan: editForm.perbaikan || null
+            }
+
+            if (editForm.pelanggaran_id) {
+                updateData.pelanggaran_id = editForm.pelanggaran_id
+            }
+
+            const { error } = await supabase
+                .from('pelanggaran')
+                .update(updateData)
+                .eq('id', editForm.id)
+
+            if (error) throw error
+
+            setIsEditOpen(false)
+            fetchData()
+        } catch (error) {
+            console.error('Error updating:', error)
+            alert('Gagal mengupdate data. Silakan coba lagi.')
+        } finally {
+            setSubmitting(false)
         }
     }
 
@@ -86,16 +148,16 @@ const Pelanggaran = () => {
         )
     }
 
-    const formatTanggal = (tanggal, createdAt) => {
+    const formatTanggal = (tanggal, waktu, createdAt) => {
         if (!tanggal) return '-'
         const date = new Date(tanggal)
         const day = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
         const year = date.getFullYear()
-        const time = createdAt ? new Date(createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''
+        const displayTime = waktu ? waktu.slice(0, 5) : (createdAt ? new Date(createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '')
         return (
             <div>
-                <p className="text-sm text-gray-800">{day}</p>
-                <p className="text-xs text-gray-400">{year} {time}</p>
+                <p className="text-sm font-semibold text-gray-800">{displayTime || day}</p>
+                <p className="text-xs text-gray-400">{displayTime ? day : year} {displayTime ? year : ''}</p>
             </div>
         )
     }
@@ -159,10 +221,10 @@ const Pelanggaran = () => {
                     <table className="w-full min-w-[900px]">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-100">
-                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tanggal</th>
+                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Waktu & Tanggal</th>
                                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Santri</th>
                                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pelanggaran</th>
-                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Perbaikan</th>
+                                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide max-w-[200px]">Keterangan & Tindakan</th>
                                 <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tingkat</th>
                                 <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Poin</th>
                                 <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Bukti</th>
@@ -196,7 +258,7 @@ const Pelanggaran = () => {
                                 filteredData.map((item) => (
                                     <tr key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                                         <td className="py-3 px-4">
-                                            {formatTanggal(item.tanggal, item.created_at)}
+                                            {formatTanggal(item.tanggal, item.waktu, item.created_at)}
                                         </td>
                                         <td className="py-3 px-4">
                                             <p className="text-sm font-medium text-gray-800">{item.santriwati?.nama || '-'}</p>
@@ -205,8 +267,23 @@ const Pelanggaran = () => {
                                         <td className="py-3 px-4">
                                             <p className="text-sm text-gray-800">{item.master_pelanggaran?.nama_pelanggaran || '-'}</p>
                                         </td>
-                                        <td className="py-3 px-4">
-                                            <p className="text-sm text-gray-600">{item.keterangan || '-'}</p>
+                                        <td className="py-3 px-4 max-w-[200px]">
+                                            <div className="space-y-1">
+                                                {item.keterangan ? (
+                                                    <p className="text-sm text-gray-600 line-clamp-2" title={item.keterangan}>
+                                                        {item.keterangan}
+                                                    </p>
+                                                ) : <span className="text-sm text-gray-400 italic">Tanpa keterangan</span>}
+
+                                                {item.perbaikan && (
+                                                    <div className="mt-1 p-1.5 bg-indigo-50/50 rounded border border-indigo-100/50">
+                                                        <p className="text-xs font-medium text-indigo-700 mb-0.5">Tindakan:</p>
+                                                        <p className="text-xs text-gray-600 line-clamp-2" title={item.perbaikan}>
+                                                            {item.perbaikan}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="py-3 px-4 text-center">
                                             {getTingkatBadge(item.master_pelanggaran?.kategori)}
@@ -237,7 +314,10 @@ const Pelanggaran = () => {
                                         {canInput && (
                                             <td className="py-3 px-4">
                                                 <div className="flex items-center justify-center gap-1">
-                                                    <button className="px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100 transition-colors">
+                                                    <button
+                                                        onClick={() => handleEditClick(item)}
+                                                        className="px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100 transition-colors"
+                                                    >
                                                         Edit
                                                     </button>
                                                     {canManage && (
@@ -286,6 +366,106 @@ const Pelanggaran = () => {
                     </div>
                 )}
             </div>
+
+            {/* Modal Edit Pelanggaran */}
+            {isEditOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="bg-white rounded-xl shadow-lg w-full max-w-lg overflow-hidden animate-slide-up">
+                        <div className="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-gray-800">Edit Pelanggaran</h2>
+                            <button
+                                onClick={() => setIsEditOpen(false)}
+                                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleEditSubmit} className="p-4 sm:p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Pilih Jenis Pelanggaran (Opsional jika ingin diubah)</label>
+                                <select
+                                    value={editForm.pelanggaran_id}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, pelanggaran_id: e.target.value }))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                >
+                                    <option value="">-- Pertahankan Pelanggaran Sebelumnya --</option>
+                                    {pelanggaranList.map((p) => (
+                                        <option key={p.id} value={p.id}>{p.nama_pelanggaran} ({p.poin} poin)</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="block text-sm font-medium text-gray-700">Tanggal</label>
+                                    <input
+                                        type="date"
+                                        required
+                                        value={editForm.tanggal}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, tanggal: e.target.value }))}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="block text-sm font-medium text-gray-700">Waktu</label>
+                                    <input
+                                        type="time"
+                                        value={editForm.waktu}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, waktu: e.target.value }))}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Keterangan / Kronologi</label>
+                                <textarea
+                                    value={editForm.keterangan}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, keterangan: e.target.value }))}
+                                    rows={3}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none"
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Tindakan / Perbaikan</label>
+                                <textarea
+                                    value={editForm.perbaikan}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, perbaikan: e.target.value }))}
+                                    rows={2}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none"
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditOpen(false)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={submitting}
+                                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                                >
+                                    {submitting && (
+                                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                        </svg>
+                                    )}
+                                    Simpan Perubahan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
