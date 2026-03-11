@@ -236,24 +236,14 @@ const Dashboard = () => {
     return (
         <div className="space-y-6">
             {/* Page Header */}
-            <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-                        <p className="text-gray-500 text-sm mt-1">Ringkasan data pelanggaran</p>
-                    </div>
-                    {/* Button - mobile */}
-                    <button
-                        onClick={() => navigate('/input-pelanggaran')}
-                        className="sm:hidden flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
-                    >
-                        <Plus className="h-4 w-4" />
-                        <span>Tambah Pelanggaran</span>
-                    </button>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+                    <p className="text-gray-500 text-sm mt-1">Ringkasan data pelanggaran</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 w-full md:w-auto">
                     {/* Search with dropdown */}
-                    <div className="relative flex-1 sm:max-w-xs" ref={searchRef}>
+                    <div className="relative flex-1 md:w-72" ref={searchRef}>
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
                         <input
                             type="text"
@@ -302,13 +292,14 @@ const Dashboard = () => {
                             </div>
                         )}
                     </div>
-                    {/* Button - desktop */}
+
+                    {/* Button */}
                     <button
                         onClick={() => navigate('/input-pelanggaran')}
-                        className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
+                        className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
                     >
                         <Plus className="h-4 w-4" />
-                        Tambah Pelanggaran
+                        <span className="hidden sm:inline">Tambah Pelanggaran</span>
                     </button>
                 </div>
             </div>
