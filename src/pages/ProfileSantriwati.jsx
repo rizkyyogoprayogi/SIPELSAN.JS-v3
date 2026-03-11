@@ -267,11 +267,11 @@ const ProfileSantriwati = () => {
                         <table className="w-full min-w-[700px]">
                             <thead>
                                 <tr className="border-b border-gray-100">
-                                    <th className="text-left py-3 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tanggal</th>
+                                    <th className="text-left py-3 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wide">Waktu & Tanggal</th>
                                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pelanggaran</th>
                                     <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tingkat</th>
                                     <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Poin</th>
-                                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Keterangan</th>
+                                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide max-w-[200px]">Keterangan & Tindakan</th>
                                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pelapor</th>
                                     <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Bukti</th>
                                 </tr>
@@ -280,11 +280,11 @@ const ProfileSantriwati = () => {
                                 {pelanggaran.map((item) => (
                                     <tr key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                                         <td className="py-3 px-6">
-                                            <p className="text-sm text-gray-800">
-                                                {new Date(item.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                            <p className="text-sm font-semibold text-gray-800">
+                                                {item.waktu ? item.waktu.slice(0, 5) : (item.created_at ? new Date(item.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '-')}
                                             </p>
-                                            <p className="text-xs text-gray-400">
-                                                {item.created_at ? new Date(item.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''}
+                                            <p className="text-xs text-gray-500">
+                                                {new Date(item.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
                                             </p>
                                         </td>
                                         <td className="py-3 px-4">
@@ -296,8 +296,23 @@ const ProfileSantriwati = () => {
                                         <td className="py-3 px-4 text-center">
                                             <span className="text-sm font-bold text-gray-800">+{item.master_pelanggaran?.poin || 0}</span>
                                         </td>
-                                        <td className="py-3 px-4">
-                                            <p className="text-sm text-gray-600">{item.keterangan || '-'}</p>
+                                        <td className="py-3 px-4 max-w-[200px]">
+                                            <div className="space-y-1">
+                                                {item.keterangan ? (
+                                                    <p className="text-sm text-gray-600 line-clamp-2" title={item.keterangan}>
+                                                        {item.keterangan}
+                                                    </p>
+                                                ) : <span className="text-sm text-gray-400 italic">Tanpa keterangan</span>}
+
+                                                {item.perbaikan && (
+                                                    <div className="mt-1 p-1.5 bg-indigo-50/50 rounded border border-indigo-100/50">
+                                                        <p className="text-xs font-medium text-indigo-700 mb-0.5">Tindakan:</p>
+                                                        <p className="text-xs text-gray-600 line-clamp-2" title={item.perbaikan}>
+                                                            {item.perbaikan}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="py-3 px-4">
                                             <p className="text-sm text-gray-600">{item.created_by_profile?.nama || '-'}</p>

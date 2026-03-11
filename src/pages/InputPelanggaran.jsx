@@ -18,7 +18,9 @@ const InputPelanggaran = () => {
         santriwati_id: '',
         pelanggaran_id: '',
         tanggal: new Date().toISOString().split('T')[0],
-        keterangan: ''
+        waktu: new Date().toTimeString().slice(0, 5),
+        keterangan: '',
+        perbaikan: ''
     })
     const [file, setFile] = useState(null)
     const [filePreview, setFilePreview] = useState(null)
@@ -147,7 +149,9 @@ const InputPelanggaran = () => {
                     santriwati_id: parseInt(formData.santriwati_id),
                     pelanggaran_id: parseInt(formData.pelanggaran_id),
                     tanggal: formData.tanggal,
+                    waktu: formData.waktu || null,
                     keterangan: formData.keterangan || null,
+                    perbaikan: formData.perbaikan || null,
                     bukti_url: buktiUrl,
                     created_by: user.id
                 })
@@ -169,7 +173,9 @@ const InputPelanggaran = () => {
                 santriwati_id: '',
                 pelanggaran_id: '',
                 tanggal: new Date().toISOString().split('T')[0],
-                keterangan: ''
+                waktu: new Date().toTimeString().slice(0, 5),
+                keterangan: '',
+                perbaikan: ''
             })
             setFile(null)
             setFilePreview(null)
@@ -263,24 +269,45 @@ const InputPelanggaran = () => {
                                 placeholder="Pilih jenis pelanggaran"
                             />
 
-                            <Input
-                                label="Tanggal"
-                                type="date"
-                                value={formData.tanggal}
-                                onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
-                                error={formErrors.tanggal}
-                            />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <Input
+                                    label="Tanggal"
+                                    type="date"
+                                    value={formData.tanggal}
+                                    onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
+                                    error={formErrors.tanggal}
+                                />
+                                <Input
+                                    label="Waktu"
+                                    type="time"
+                                    value={formData.waktu}
+                                    onChange={(e) => setFormData({ ...formData, waktu: e.target.value })}
+                                />
+                            </div>
 
                             <div className="space-y-1.5">
                                 <label className="block text-sm font-medium text-text-secondary">
-                                    Keterangan (Opsional)
+                                    Keterangan / Kronologi
                                 </label>
                                 <textarea
                                     value={formData.keterangan}
                                     onChange={(e) => setFormData({ ...formData, keterangan: e.target.value })}
                                     rows={3}
                                     className="w-full px-4 py-2.5 rounded-lg bg-surface border border-border text-text-primary placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 resize-none"
-                                    placeholder="Tambahkan keterangan jika diperlukan..."
+                                    placeholder="Ceritakan kronologi pelanggaran..."
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="block text-sm font-medium text-text-secondary">
+                                    Tindakan / Perbaikan yang Diberikan
+                                </label>
+                                <textarea
+                                    value={formData.perbaikan}
+                                    onChange={(e) => setFormData({ ...formData, perbaikan: e.target.value })}
+                                    rows={2}
+                                    className="w-full px-4 py-2.5 rounded-lg bg-surface border border-border text-text-primary placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 resize-none"
+                                    placeholder="Contoh: Diberi teguran lisan dan membaca istighfar..."
                                 />
                             </div>
 
