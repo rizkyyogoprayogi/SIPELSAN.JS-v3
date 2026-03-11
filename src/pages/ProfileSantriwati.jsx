@@ -165,37 +165,37 @@ const ProfileSantriwati = () => {
             </div>
 
             {/* Ringkasan Kategori Pelanggaran */}
-            <Card title="Ringkasan Kategori Pelanggaran">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
-                    <div className="flex items-center gap-4 pt-4 sm:pt-0 first:pt-0 sm:px-4 first:sm:pl-0 last:sm:pr-0">
-                        <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center shrink-0">
-                            <AlertTriangle className="h-6 w-6 text-green-500" />
+            <Card title="Kategori Pelanggaran" className="mb-6">
+                <div className="grid grid-cols-3 divide-x divide-gray-100">
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4 py-2 sm:py-0 sm:px-4 first:sm:pl-0 text-center sm:text-left">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+                            <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500 font-medium">Pelanggaran Ringan</p>
-                            <p className="text-2xl font-bold text-gray-900">
+                            <p className="text-xs sm:text-sm text-gray-500 font-medium">Ringan</p>
+                            <p className="text-xl sm:text-2xl font-bold text-gray-900 lg:mt-1">
                                 {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'ringan').length}
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 pt-4 sm:pt-0 sm:px-4">
-                        <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
-                            <AlertTriangle className="h-6 w-6 text-yellow-500" />
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4 py-2 sm:py-0 px-2 sm:px-4 text-center sm:text-left">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
+                            <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500 font-medium">Pelanggaran Sedang</p>
-                            <p className="text-2xl font-bold text-gray-900">
+                            <p className="text-xs sm:text-sm text-gray-500 font-medium">Sedang</p>
+                            <p className="text-xl sm:text-2xl font-bold text-gray-900 lg:mt-1">
                                 {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'sedang').length}
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 pt-4 sm:pt-0 sm:px-4">
-                        <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                            <AlertTriangle className="h-6 w-6 text-red-500" />
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4 py-2 sm:py-0 px-2 sm:px-4 last:sm:pr-0 text-center sm:text-left">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                            <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500 font-medium">Pelanggaran Berat</p>
-                            <p className="text-2xl font-bold text-gray-900">
+                            <p className="text-xs sm:text-sm text-gray-500 font-medium">Berat</p>
+                            <p className="text-xl sm:text-2xl font-bold text-gray-900 lg:mt-1">
                                 {pelanggaran.filter(p => p.master_pelanggaran?.kategori === 'berat').length}
                             </p>
                         </div>
