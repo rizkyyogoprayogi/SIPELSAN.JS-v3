@@ -6,6 +6,7 @@ import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Select from '../components/ui/Select'
+import { useRef } from 'react'
 
 const InputPelanggaran = () => {
     const { user } = useAuth()
@@ -29,6 +30,22 @@ const InputPelanggaran = () => {
     // Selected data info
     const [selectedSantriwati, setSelectedSantriwati] = useState(null)
     const [selectedPelanggaran, setSelectedPelanggaran] = useState(null)
+
+    // Searchable dropdown state
+    const [searchQuery, setSearchQuery] = useState('')
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const dropdownRef = useRef(null)
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setIsDropdownOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
 
     useEffect(() => {
         fetchData()
@@ -57,12 +74,18 @@ const InputPelanggaran = () => {
         }
     }
 
-    const handleSantriwatiChange = (e) => {
-        const id = e.target.value
-        setFormData({ ...formData, santriwati_id: id })
-        const selected = santriwatiList.find(s => s.id === parseInt(id))
-        setSelectedSantriwati(selected || null)
+    const handleSantriwatiSelect = (santriwati) => {
+        setFormData({ ...formData, santriwati_id: santriwati.id })
+        setSelectedSantriwati(santriwati)
+        setSearchQuery(`${santriwati.nis} - ${santriwati.nama}`)
+        setIsDropdownOpen(false)
+        setFormErrors({ ...formErrors, santriwati_id: null })
     }
+
+    const filteredSantriwati = santriwatiList.filter(s =>
+        s.nama?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.nis?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
     const handlePelanggaranChange = (e) => {
         const id = e.target.value
@@ -181,6 +204,7 @@ const InputPelanggaran = () => {
             setFilePreview(null)
             setSelectedSantriwati(null)
             setSelectedPelanggaran(null)
+            setSearchQuery('')
             setSuccess(true)
 
             // Hide success message after 3 seconds
@@ -245,17 +269,56 @@ const InputPelanggaran = () => {
                 <div className="lg:col-span-2">
                     <Card title="Form Pelanggaran">
                         <form onSubmit={handleSubmit} className="space-y-5">
-                            <Select
-                                label="Santriwati"
-                                value={formData.santriwati_id}
-                                onChange={handleSantriwatiChange}
-                                error={formErrors.santriwati_id}
-                                options={santriwatiList.map(s => ({
-                                    value: s.id,
-                                    label: `${s.nis} - ${s.nama} (${s.kelas?.nama_kelas || '-'})`
-                                }))}
-                                placeholder="Pilih santriwati"
-                            />
+                            {/* Searchable Dropdown Santriwati */}
+                            <div className="relative" ref={dropdownRef}>
+                                <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                                    Santriwati
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={(e) => {
+                                            setSearchQuery(e.target.value)
+                                            setIsDropdownOpen(true)
+                                            if (formData.santriwati_id) {
+                                                setFormData({ ...formData, santriwati_id: '' })
+                                                setSelectedSantriwati(null)
+                                            }
+                                        }}
+                                        onFocus={() => setIsDropdownOpen(true)}
+                                        placeholder="Cari nama atau NIS santriwati..."
+                                        className={`w-full px-4 py-2.5 rounded-lg bg-surface border ${formErrors.santriwati_id ? 'border-danger focus:border-danger focus:ring-danger' : 'border-border focus:border-primary focus:ring-primary'
+                                            } text-text-primary placeholder-text-secondary outline-none focus:ring-1 transition-all duration-200`}
+                                    />
+                                    {formErrors.santriwati_id && (
+                                        <p className="mt-1.5 text-sm text-danger">{formErrors.santriwati_id}</p>
+                                    )}
+                                </div>
+
+                                {isDropdownOpen && (
+                                    <div className="absolute z-10 w-full mt-1 bg-white border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                        {filteredSantriwati.length > 0 ? (
+                                            filteredSantriwati.map((s) => (
+                                                <button
+                                                    key={s.id}
+                                                    type="button"
+                                                    onClick={() => handleSantriwatiSelect(s)}
+                                                    className={`w-full text-left px-4 py-2.5 hover:bg-surface-hover transition-colors border-b border-border last:border-0 ${formData.santriwati_id === s.id ? 'bg-primary/5 text-primary' : 'text-text-primary'
+                                                        }`}
+                                                >
+                                                    <p className="font-medium text-sm">{s.nama}</p>
+                                                    <p className="text-xs text-text-secondary mt-0.5">NIS: {s.nis} • Kelas: {s.kelas?.nama_kelas || '-'}</p>
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <div className="px-4 py-3 text-sm text-text-secondary text-center">
+                                                Tidak ada santriwati yang cocok
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
 
                             <Select
                                 label="Jenis Pelanggaran"
