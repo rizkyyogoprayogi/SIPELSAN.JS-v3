@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
 import { Search, Plus, Edit2, Trash2, Image, Eye } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const Pelanggaran = () => {
     const { canInput, canManage } = useAuth()
@@ -262,8 +262,17 @@ const Pelanggaran = () => {
                                             {formatTanggal(item.tanggal, item.waktu, item.created_at)}
                                         </td>
                                         <td className="py-3 px-4">
-                                            <p className="text-sm font-medium text-gray-800">{item.santriwati?.nama || '-'}</p>
-                                            <p className="text-xs text-gray-400">{item.santriwati?.kelas?.nama_kelas || '-'}</p>
+                                            {item.santriwati ? (
+                                                <Link
+                                                    to={`/santriwati/${item.santriwati_id}`}
+                                                    className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline inline-block"
+                                                >
+                                                    {item.santriwati.nama}
+                                                </Link>
+                                            ) : (
+                                                <p className="text-sm font-medium text-gray-800">-</p>
+                                            )}
+                                            <p className="text-xs text-gray-400 mt-0.5">{item.santriwati?.kelas?.nama_kelas || '-'}</p>
                                         </td>
                                         <td className="py-3 px-4">
                                             <p className="text-sm text-gray-800">{item.master_pelanggaran?.nama_pelanggaran || '-'}</p>
