@@ -74,6 +74,12 @@ const Sidebar = ({ isOpen, onClose }) => {
             show: canManage
         },
         {
+            name: 'Log Aktivitas',
+            path: '/log-aktivitas',
+            icon: History,
+            show: canManage
+        },
+        {
             name: 'Manajemen User',
             path: '/manajemen-user',
             icon: UserCog,

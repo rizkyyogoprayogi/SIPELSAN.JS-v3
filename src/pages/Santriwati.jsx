@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
+import { logActivity } from '../services/activityLogger'
 import { Plus, Pencil, Trash2, Search, Users } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
@@ -11,7 +12,7 @@ import Select from '../components/ui/Select'
 import Modal from '../components/ui/Modal'
 
 const Santriwati = () => {
-    const { canManage } = useAuth()
+    const { user, canManage } = useAuth()
     const navigate = useNavigate()
     const [data, setData] = useState([])
     const [kelas, setKelas] = useState([])
@@ -129,6 +130,13 @@ const Santriwati = () => {
                     .eq('id', selectedItem.id)
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'EDIT',
+                    'Santriwati',
+                    `Mengupdate data santriwati: ${formData.nama} (NIS: ${formData.nis})`
+                )
             } else {
                 // Insert
                 const { error } = await supabase
@@ -146,6 +154,13 @@ const Santriwati = () => {
                     })
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'TAMBAH',
+                    'Santriwati',
+                    `Menambahkan santriwati baru: ${formData.nama} (NIS: ${formData.nis})`
+                )
             }
 
             setIsModalOpen(false)
@@ -166,6 +181,14 @@ const Santriwati = () => {
                 .eq('id', selectedItem.id)
 
             if (error) throw error
+
+            await logActivity(
+                user.id,
+                'HAPUS',
+                'Santriwati',
+                `Menghapus data santriwati: ${selectedItem.nama} (NIS: ${selectedItem.nis})`
+            )
+
             setIsDeleteModalOpen(false)
             fetchData()
         } catch (error) {

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
-import { Search, Plus, Edit2, Trash2, Image, Eye } from 'lucide-react'
+import { logActivity } from '../services/activityLogger'
+import { Search, Plus, Eye } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 
 const Pelanggaran = () => {
-    const { canInput, canManage } = useAuth()
+    const { user, canInput, canManage } = useAuth()
     const navigate = useNavigate()
     const [data, setData] = useState([])
     const [pelanggaranList, setPelanggaranList] = useState([])
@@ -76,6 +77,14 @@ const Pelanggaran = () => {
                 .delete()
                 .eq('id', id)
             if (error) throw error
+
+            await logActivity(
+                user.id,
+                'HAPUS',
+                'Pelanggaran',
+                `Menghapus riwayat pelanggaran dengan ID: ${id}`
+            )
+
             setDeleteConfirm(null)
             fetchData()
         } catch (error) {
@@ -116,6 +125,13 @@ const Pelanggaran = () => {
                 .eq('id', editForm.id)
 
             if (error) throw error
+
+            await logActivity(
+                user.id,
+                'EDIT',
+                'Pelanggaran',
+                `Mengedit riwayat pelanggaran dengan ID: ${editForm.id}`
+            )
 
             setIsEditOpen(false)
             fetchData()

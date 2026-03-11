@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../services/supabaseClient'
 import { createClient } from '@supabase/supabase-js'
 import { useAuth } from '../hooks/useAuth'
-import { Plus, Pencil, Trash2, Search, Shield, ShieldCheck } from 'lucide-react'
+import { logActivity } from '../services/activityLogger'
+import { Plus, Pencil, Trash2, Search, UserCog, User as UserIcon } from 'lucide-react'
 import Modal from '../components/ui/Modal'
 
 const ManajemenUser = () => {
-    const { isAdmin } = useAuth()
+    const { user, isAdmin } = useAuth()
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
@@ -94,6 +95,13 @@ const ManajemenUser = () => {
                     .eq('id', selectedUser.id)
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'EDIT',
+                    'User',
+                    `Mengupdate hak akses/profil user: ${formData.nama} (${formData.role})`
+                )
             } else {
                 // Gunakan client Supabase secondary agar admin tidak ter-logout saat mendaftarkan user baru
                 const tempSupabase = createClient(
@@ -124,6 +132,13 @@ const ManajemenUser = () => {
                 // Trigger database Supabase secara otomatis akan membuat record di tabel profiles
                 // karena kita sudah menyertakan 'nama' dan 'role' di dalam options.data
                 // Sehingga kita tidak perlu melakukan INSERT manual ke tabel profiles lagi.
+
+                await logActivity(
+                    user.id,
+                    'TAMBAH',
+                    'User',
+                    `Menambahkan user baru: ${formData.nama} (${formData.email})`
+                )
             }
 
             setIsModalOpen(false)
@@ -144,6 +159,14 @@ const ManajemenUser = () => {
                 .eq('id', selectedUser.id)
 
             if (error) throw error
+
+            await logActivity(
+                user.id,
+                'HAPUS',
+                'User',
+                `Menghapus user: ${selectedUser.nama}`
+            )
+
             setIsDeleteModalOpen(false)
             fetchUsers()
         } catch (error) {

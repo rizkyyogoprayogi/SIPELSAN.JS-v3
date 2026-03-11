@@ -13,6 +13,7 @@ import ProfileSantriwati from './pages/ProfileSantriwati'
 import ProfileKelas from './pages/ProfileKelas'
 import ManajemenUser from './pages/ManajemenUser'
 import GenerateSurat from './pages/GenerateSurat'
+import LogAktivitas from './pages/LogAktivitas'
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="santriwati/:id" element={<ProfileSantriwati />} />
             <Route path="manajemen-user" element={<ManajemenUser />} />
             <Route path="generate-surat" element={<GenerateSurat />} />
+            <Route path="log-aktivitas" element={<LogAktivitas />} />
           </Route>
 
           {/* Catch all */}

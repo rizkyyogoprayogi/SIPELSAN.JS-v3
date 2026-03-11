@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
-import { Upload, X, CheckCircle, Send } from 'lucide-react'
+import { logActivity } from '../services/activityLogger'
+import { Upload, X, Search, CheckCircle2, User, AlertTriangle } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -190,6 +192,13 @@ const InputPelanggaran = () => {
                 .eq('id', parseInt(formData.santriwati_id))
 
             if (updateError) throw updateError
+
+            await logActivity(
+                user.id,
+                'TAMBAH',
+                'Pelanggaran',
+                `Mencatat pelanggaran baru untuk: ${selectedSantriwati?.nama || formData.santriwati_id} - ${selectedPelanggaran?.nama_pelanggaran || formData.pelanggaran_id}`
+            )
 
             // Reset form
             setFormData({

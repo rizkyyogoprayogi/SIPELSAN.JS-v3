@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
+import { logActivity } from '../services/activityLogger'
 import { Plus, Pencil, Trash2, GraduationCap } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
@@ -10,7 +11,7 @@ import Input from '../components/ui/Input'
 import Modal from '../components/ui/Modal'
 
 const Kelas = () => {
-    const { canManage } = useAuth()
+    const { user, canManage } = useAuth()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [filterLembaga, setFilterLembaga] = useState('Semua')
@@ -95,6 +96,13 @@ const Kelas = () => {
                     .eq('id', selectedItem.id)
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'EDIT',
+                    'Kelas',
+                    `Mengupdate data kelas: ${formData.nama_kelas}`
+                )
             } else {
                 const { error } = await supabase
                     .from('kelas')
@@ -106,6 +114,13 @@ const Kelas = () => {
                     })
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'TAMBAH',
+                    'Kelas',
+                    `Menambahkan kelas baru: ${formData.nama_kelas}`
+                )
             }
 
             setIsModalOpen(false)
@@ -126,6 +141,14 @@ const Kelas = () => {
                 .eq('id', selectedItem.id)
 
             if (error) throw error
+
+            await logActivity(
+                user.id,
+                'HAPUS',
+                'Kelas',
+                `Menghapus data kelas: ${selectedItem.nama_kelas}`
+            )
+
             setIsDeleteModalOpen(false)
             fetchData()
         } catch (error) {

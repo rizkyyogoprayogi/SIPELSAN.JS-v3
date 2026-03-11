@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../services/supabaseClient'
+import { useAuth } from '../hooks/useAuth'
+import { logActivity } from '../services/activityLogger'
 import { Plus, Pencil, Trash2, Search } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
@@ -9,6 +11,7 @@ import Select from '../components/ui/Select'
 import Modal from '../components/ui/Modal'
 
 const MasterPelanggaran = () => {
+    const { user } = useAuth()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
@@ -100,6 +103,13 @@ const MasterPelanggaran = () => {
                     .eq('id', selectedItem.id)
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'EDIT',
+                    'Master Pelanggaran',
+                    `Mengedit master pelanggaran: ${formData.nama_pelanggaran}`
+                )
             } else {
                 const { error } = await supabase
                     .from('master_pelanggaran')
@@ -110,6 +120,13 @@ const MasterPelanggaran = () => {
                     })
 
                 if (error) throw error
+
+                await logActivity(
+                    user.id,
+                    'TAMBAH',
+                    'Master Pelanggaran',
+                    `Menambahkan master pelanggaran baru: ${formData.nama_pelanggaran}`
+                )
             }
 
             setIsModalOpen(false)
@@ -130,6 +147,14 @@ const MasterPelanggaran = () => {
                 .eq('id', selectedItem.id)
 
             if (error) throw error
+
+            await logActivity(
+                user.id,
+                'HAPUS',
+                'Master Pelanggaran',
+                `Menghapus master pelanggaran: ${selectedItem.nama_pelanggaran}`
+            )
+
             setIsDeleteModalOpen(false)
             fetchData()
         } catch (error) {
