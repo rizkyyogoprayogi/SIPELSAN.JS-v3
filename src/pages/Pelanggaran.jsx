@@ -269,22 +269,18 @@ const Pelanggaran = () => {
                                             <p className="text-sm text-gray-800">{item.master_pelanggaran?.nama_pelanggaran || '-'}</p>
                                         </td>
                                         <td className="py-3 px-4 max-w-[200px]">
-                                            <div className="space-y-1">
-                                                {item.keterangan ? (
-                                                    <p className="text-sm text-gray-600 line-clamp-2" title={item.keterangan}>
-                                                        {item.keterangan}
-                                                    </p>
-                                                ) : <span className="text-sm text-gray-400 italic">Tanpa keterangan</span>}
-
-                                                {item.perbaikan && (
-                                                    <div className="mt-1 p-1.5 bg-indigo-50/50 rounded border border-indigo-100/50">
-                                                        <p className="text-xs font-medium text-indigo-700 mb-0.5">Tindakan:</p>
-                                                        <p className="text-xs text-gray-600 line-clamp-2" title={item.perbaikan}>
-                                                            {item.perbaikan}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
+                                            {item.keterangan ? (
+                                                <p className="text-sm text-gray-600 line-clamp-2" title={item.keterangan}>
+                                                    {item.keterangan}
+                                                </p>
+                                            ) : <span className="text-sm text-gray-400 italic">Tanpa keterangan</span>}
+                                        </td>
+                                        <td className="py-3 px-4 max-w-[200px]">
+                                            {item.perbaikan ? (
+                                                <p className="text-sm text-gray-600 line-clamp-2" title={item.perbaikan}>
+                                                    {item.perbaikan}
+                                                </p>
+                                            ) : <span className="text-sm text-gray-400 italic">-</span>}
                                         </td>
                                         <td className="py-3 px-4 text-center">
                                             {getTingkatBadge(item.master_pelanggaran?.kategori)}
