@@ -115,7 +115,6 @@ const LogAktivitas = () => {
             {/* Header */}
             <div>
                 <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
-                    <History className="h-6 w-6 text-indigo-600" />
                     Log Aktivitas Sistem
                 </h1>
                 <p className="text-text-secondary mt-1">Pantau seluruh catatan perubahan data yang dilakukan oleh pengguna</p>
